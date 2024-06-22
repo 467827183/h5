@@ -1,0 +1,328 @@
+.outBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .scrollBox{
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 12px 15px 15px;
+  }
+  .header {
+    padding: 15px;
+    height: 66px;
+    border-bottom: 1px solid rgba(237, 237, 243, 1);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .switchBox {
+    height: 38px;
+    background: rgba(216, 216, 216, 0.3);
+    border-radius: 18px;
+    padding: 2px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 500;
+    font-size: 14px;
+    color: #666666;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .active {
+    width: 53px;
+    height: 34px;
+    background: #FFFFFF;
+    border-radius: 18px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+    line-height: 34px;
+    text-align: center;
+    font-style: normal;
+  }
+
+  .noActive {
+    width: 53px;
+    height: 34px;
+    border-radius: 18px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(102, 102, 102, 1);
+    line-height: 34px;
+    text-align: center;
+    font-style: normal;
+  }
+
+  .right_select {
+    height: 28px;
+    border-radius: 14px;
+    border: 1px solid #E8E8EB;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 10px;
+
+    img {
+      width: 7px;
+      height: 4px;
+      margin-left: 5px;
+    }
+  }
+
+
+}
+
+.popHeader {
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+  font-size: 18px;
+  color: #000000;
+  line-height: 25px;
+  text-align: left;
+  font-style: normal;
+  margin-bottom: 20px;
+}
+
+.item {
+  height: 22px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+
+  .line {
+    width: 2px;
+    height: 14px;
+    border-radius: 1px;
+    margin-right: 6px;
+  }
+
+  .name {
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 14px;
+    color: #000000;
+    text-align: left;
+    font-style: normal;
+  }
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.bottomBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .btnLeft {
+    width: 95px;
+    height: 45px;
+    background: #FFFFFF;
+    border-radius: 23px;
+    border: 1px solid #D3D1D1;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 14px;
+    color: #0B0B0B;
+    line-height: 45px;
+    text-align: center;
+    font-style: normal;
+  }
+
+  .btnRight {
+    width: 230px;
+    height: 45px;
+    background: #000000;
+    border-radius: 23px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 14px;
+    color: #FFFFFF;
+    line-height: 45px;
+    text-align: center;
+    font-style: normal;
+  }
+}
+:global{
+  .adm-list-default .adm-list-body{
+    border-top: none;
+    border-bottom: none;
+  }
+  .adm-list-item-content-main{
+    padding: 0;
+  }
+  .adm-list-item{
+    line-height: 1;
+  }
+}
+.comNumber{
+  display: flex;
+  align-items: center;
+  height: 18px;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  font-size: 13px;
+  color: #999999;
+  line-height: 18px;
+  text-align: left;
+  font-style: normal;
+  text-decoration-line: underline;
+  margin-bottom: 9px;
+  .point{
+    width: 3px;
+    height: 3px;
+    background: #999999;
+    margin: 0 6px 0 4px;
+  }
+}
+.number{
+  height: 25px;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  font-size: 18px;
+  color: #000000;
+  line-height: 25px;
+  text-align: left;
+  font-style: normal;
+  margin-bottom: 8px;
+  .unit{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 12px;
+    color: #000000;
+    line-height: 17px;
+    text-align: left;
+    font-style: normal;
+    margin-right: 5px;
+  }
+}
+.button{
+  width: 55px;
+  height: 28px;
+  background: #2DBF64;
+  border-radius: 14px;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  font-size: 12px;
+  color: #FFFFFF;
+  line-height: 28px;
+  text-align: center;
+  font-style: normal;
+}
+.typeBox{
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  .line{
+    width: 2px;
+    height: 9px;
+    background: #2EAF64;
+    border-radius: 1px;
+    margin-right: 3px;
+  }
+  .name{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 12px;
+    color: #9A9B9B;
+    line-height: 17px;
+    text-align: left;
+    font-style: normal;
+  }
+}
+.numberItem{
+  display: flex;
+  align-items: center;
+  :nth-child(1){
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 13px;
+    color: #A0A1A1;
+    line-height: 18px;
+    text-align: left;
+    font-style: normal;
+    margin-right: 7px;
+  }
+  :nth-child(2){
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 13px;
+    color: #000000;
+    line-height: 18px;
+    text-align: left;
+    font-style: normal;
+  }
+}
+.comheader{
+  height: 20px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000000;
+  line-height: 20px;
+  text-align: left;
+  font-style: normal;
+  display: flex;
+  align-items: center;
+  .btm{
+    width: 18px;
+    height: 18px;
+    background: #2DBF64;
+    border-radius: 50%;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 18px;
+    margin-right: 5px;
+  }
+}
+.order{
+  width: 46px;
+  height: 46px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  right: 12px;
+  top: 50%;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  div{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 10px;
+    color: #FFFFFF;
+    line-height: 14px;
+    font-style: normal;
+    margin-bottom: 2px;
+
+  }
+  img{
+    width: 18px;
+    height: 18px;
+  }
+}

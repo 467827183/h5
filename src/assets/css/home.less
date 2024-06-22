@@ -1,53 +1,110 @@
 .indexContainer {
   overflow-x: hidden;
-  padding-bottom: 125px;
-  .indexHeader {
+  padding-bottom: 50px;
+  .logoBox{
     display: flex;
-    height: 100px;
-    justify-content: space-between;
-    align-items: center;
-    padding: 32px 4.3vw 16px;
-    position: fixed;
+    justify-content: center;
+  }
+  .logo{
+    width: 81px;
+    height: 18px;
+    margin-top: 13px;
+    margin-bottom: 21px;
+  }
+  .swiperBox{
     width: 100%;
-    background-color: #f5f5f5;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+  .swiperItem {
+    height: 150px;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    user-select: none;
+  }
+  .line{
+    width: 100%;
+    height: 7px;
+    background: rgba(244, 248, 251, 1);
+  }
+  .customIndicator {
+    position: absolute;
+    bottom: 13px;
+    right: 20px;
+    background: rgba(186, 255, 45, 1);
+    // padding: 3px 7px;
+    color: rgba(0, 0, 0, 1);
+    border-radius: 11px;
+    user-select: none;
+    height: 22px;
+    line-height: 22px;
+    width: 33px;
+    font-size: 11px;
+    text-align: center;
+    span{
+      color: rgba(102, 102, 102, 1);
+    }
+  }
+  .title{
+    width: 100%;
+    padding: 21px 0 15px 14px;
+    color: rgba(0, 0, 0, 1);
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+    line-height: 22px;
+  }
+  .line2{
+    width: 100%;
+    height: 1px;
+    background: rgba(237, 237, 243, 1);
+    margin-bottom: 20px;
+  }
+  .newsItme{
+    margin-bottom: 22px;
+    width: 100%;
+  }
+  .titles{
+    width: 100%;
+    margin-bottom: 7px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 14px;
+    color: #000000;
+    line-height: 20px;
+    text-align: left;
+    font-style: normal;
+  }
+  .time{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 12px;
+    color: #999999;
+    line-height: 17px;
+    text-align: left;
+    font-style: normal;
+  }
+  .more{
+    margin-bottom: 14px;
+    width: 100%;
+    height: 45px;
+border-radius: 23px;
+border: 1px solid #E8E8EB;
+font-family: PingFangSC, PingFang SC;
+font-weight: 500;
+font-size: 14px;
+color: #000000;
+line-height: 45px;
+text-align: right;
+font-style: normal;
+text-align: center;
+  }
+  .newsBox{
+    padding: 0 15px;
   }
 
-  .indexBody {
-    padding-top: 150px;
-    .indexTop {
-      margin: 32px;
-      font-size: 32px;
-      .desc {
-      }
-      .btn {
-        margin: 32px 0;
-        background-color: chocolate;
-        color: #fff;
-      }
-    }
-    .swiper {
-      margin: 16px 32px;
-      width: calc(100vw - 64px);
-      .swiperItem {
-        height: 175px;
-      }
-      .customIndicator {
-        display: flex;
-        justify-content: center;
-        border-radius: 4px;
-      }
-      .indicator {
-        width: 40px;
-        height: 8px;
-        background-color: #fff;
-      }
-      .activeIndicator {
-        border-radius: 4px;
-        background-color: rgb(255, 88, 20);
-      }
-    }
-    .banner {
-      border-radius: 20px;
-    }
-  }
 }

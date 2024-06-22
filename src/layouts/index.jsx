@@ -1,12 +1,20 @@
 import { Outlet } from "umi";
 import { useNavigate, matchRoutes, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import router from "@/routes";
+import router from "../config/routers";
 import "lib-flexible";
 import { TabBar, SafeArea } from "antd-mobile";
 import { AppOutline, HeartOutline, UserOutline } from "antd-mobile-icons";
 import "normalize.css/normalize.css"; //全局引入
 import styles from "./index.less";
+import homeActive from "../assets/home_active.png";
+import home from "../assets/home.png";
+import flowActive from "../assets/flow_active.png";
+import flow from "../assets/flow.png";
+import transactionActive from "../assets/transaction_active.png";
+import transaction from "../assets/transaction.png";
+import myActive from "../assets/my_active.png";
+import my from "../assets/my.png";
 export default function Layout() {
   const location = useLocation();
   const [defaultSelectedKeys, setDefaultSelectedKeys] = useState([]);
@@ -37,32 +45,45 @@ export default function Layout() {
   const setRouteActive = (value) => {
     navigate(value);
   };
-
+  const imgItem = (name)=>{
+    return <img src={name} style={{width:'100%',height:'100%'}}/>
+  }
   const tabs = [
     {
       key: "/home",
       title: "首页",
-      icon: <AppOutline fontSize="25" />,
+      icon: (active) =>
+        active ? imgItem(homeActive) : imgItem(home),
+      
+    },
+    {
+      key: "/flow",
+      title: "流动池",
+      icon: (active) =>
+        active ? imgItem(flowActive) : imgItem(flow),
     },
     {
       key: "/about",
-      title: "关于",
-      icon: <HeartOutline fontSize="25" />,
+      title: "交易(C2C)",
+      icon: (active) =>
+        active ? imgItem(transactionActive) : imgItem(transaction),
     },
 
     {
       key: "/my",
       title: "我的",
-      icon: <UserOutline fontSize="25" />,
+      icon: (active) =>
+        active ? imgItem(myActive) : imgItem(my),
     },
   ];
   return (
     <>
+    <div className={styles.outBox}>
       <div className={styles.app}>
         <SafeArea position="top" />
         <Outlet />
       </div>
-      {["/home", "/about", "/my"].includes(pathname) && (
+      {["/home", '/flow',"/about", "/my"].includes(pathname) && (
         <div className={styles.bottom}>
           <TabBar
             defaultActiveKey="/home"
@@ -82,6 +103,7 @@ export default function Layout() {
           <SafeArea position="bottom" />
         </div>
       )}
+      </div>
     </>
   );
 }

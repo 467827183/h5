@@ -1,5 +1,5 @@
 .app {
-  height: 100vh;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
 }
@@ -18,12 +18,56 @@
   background-color: white;
   border-top: solid 1px var(--adm-color-border);
   .tabbar {
-    padding: 10px 0;
-    font-size: 24px;
-    height: 110px;
+    padding: 0 34px;
+    font-size: 11px;
+    height: 50px;
     .tabbarItem {
-      height: 110px;
-      justify-content: space-around;
+      height: 50px;
     }
+  }
+
+}
+:root {
+  --adm-popup-z-index: 100000;
+}
+:global{
+  @font-face {
+    font-family: 'DINPro';
+    src: url('./DIN-Pro-Regular.otf') format('opentype');
+    /* 添加其他字重的样式，如需要 */
+  }
+  @font-face {
+    font-family: 'PingFangSC';
+    src: url('./PingFangSC-Regular.otf') format('opentype');
+    /* 添加其他字重的样式，如需要 */
+  }
+  div{
+    box-sizing: border-box;
+  }
+  .adm-input-element{
+    font-size: 26px;
+  }
+  .adm-list-item{
+    padding-left: 0px;
+  }
+  .adm-tab-bar-item{
+    padding: 0 !important;
+    flex: none;
+    color: rgba(153, 153, 153, 1);
+  }
+  .adm-tab-bar-item-active{
+    color: black;
+  }
+  .adm-tab-bar-wrap{
+    justify-content: space-between;
+  }
+  .adm-tab-bar-item-icon{
+    width: 20px;
+    height: 20px;
+  }
+  .adm-tab-bar-item-title{
+    line-height: 16px;
+    height: 16px;
+    margin-top: 3px;
   }
 }
