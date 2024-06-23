@@ -12,5 +12,7 @@ export default {
       ],
     },
     { path: "/notice", component: "@/pages/notice" },
+    { path: "/transaction/:type", component: "@/pages/transaction" },
+    { path: "/order/:type", component: "@/pages/order" },
   ],
 };

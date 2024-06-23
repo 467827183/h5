@@ -5,7 +5,9 @@ import dropDown from "../../assets/dropDown.png";
 import { Popup,PullToRefresh, List,InfiniteScroll  } from 'antd-mobile'
 import { sleep } from 'antd-mobile/es/utils/sleep'
 import check from "../../assets/check.png";
+import { useNavigate } from "react-router-dom";
 import unCheck from "../../assets/unCheck.png";
+import order from "../../assets/order.png";
 // import { lorem } from 'demos'
 export default function AboutPage() {
   const [active, setActive] = useState(2)
@@ -17,7 +19,7 @@ export default function AboutPage() {
     {name:'微信支付',status:false,line:'rgba(46, 175, 100, 1)',type:4},
   ])
   const [hasMore, setHasMore] = useState(true)
-
+  const navigate = useNavigate();
   const [data, setData] = useState(() => getNextData())
   const itemClick = (index )=>{
     const newArr = [...selectItem]
@@ -53,6 +55,9 @@ export default function AboutPage() {
     }
     return ret
   }
+  const gotoOrder = () =>{
+    navigate(`/order/${active}`);
+  }
   const reset = () =>{
     const newArr = [...selectItem]
     newArr.forEach(item=>{
@@ -64,11 +69,14 @@ export default function AboutPage() {
   const submit = () =>{
     setVisible(false)
   }
+  const gotoDetail =(active) =>{
+    navigate(`/transaction/${active}`);
+  }
   return (
     <div className={styles.outBox}>
-      <div className={styles.order}>
-        <img src={unCheck}/>
-        <div>订单</div>
+      <div className={styles.order} onClick={gotoOrder}>
+        <img src={order}/>
+        <div style={{marginTop:'5px'}}>订单</div>
       </div>
       <div className={styles.header}>
         <div className={styles.switchBox}>
@@ -145,7 +153,7 @@ export default function AboutPage() {
               <div className={styles.number}><span className={styles.unit}>￥</span>1.00</div>
               <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'9px'}}>
                 <div>
-                  <div className={styles.numberItem} style={{marginBlock:'4px'}}>
+                  <div className={styles.numberItem} style={{marginBottom:'4px'}}>
                     <div>数量</div>
                     <div>12,004.93 DCP</div>
                   </div>
@@ -154,7 +162,7 @@ export default function AboutPage() {
                     <div>100-20000 CNY</div>
                   </div>
                 </div>
-                <div className={styles.button} style={{background:active==1?'#2DBF64':"rgba(235, 75, 110, 1)"}}>{active == 1?'购买':'出售'}</div>
+                <div className={styles.button} style={{background:active==1?'#2DBF64':"rgba(235, 75, 110, 1)"}} onClick={()=>gotoDetail(active)}>{active == 1?'购买':'出售'}</div>
               </div>
               <div className={styles.typeBox}>
                 <div className={styles.line}></div>

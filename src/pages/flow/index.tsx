@@ -157,7 +157,7 @@ export default function HomePage() {
             <div>{(currentItem.type == 1 || currentItem.type == 2) ? '兑换' : '转入'}数量</div>
             <span>可用：500.00</span>
           </div>
-          <Form layout='horizontal'>
+          <Form layout='horizontal' style={{'--border-top':'none'}}>
             <Form.Item
               extra={
                 <div className={styles.extraPart}>
