@@ -7,7 +7,15 @@ import accout from  "../../assets/icon_accout.png";
 import customer from  "../../assets/icon_customer.png";
 import set from  "../../assets/icon_set.png";
 import arrow_right from  "../../assets/arrow_right.png";
+import { useNavigate } from "react-router-dom";
 function MyPage(props) {
+  const navigate = useNavigate();
+  const gotoDetail = () =>{
+    navigate('/dcp');
+  }
+  const gotoAsset = ()=>[
+    navigate('/assetDetail/1')
+  ]
   return (
     <div className={styles.box}>
       <div className={styles.headerPic}>
@@ -21,7 +29,7 @@ function MyPage(props) {
           <div className={styles.line}></div>
           <div className={styles.date}>注册日期:2024/06/10</div>
         </div>
-        <img src={dpc} className={styles.dcp}></img>
+        <img src={dpc} className={styles.dcp} onClick={gotoDetail}></img>
       </div>
       <div className={styles.line}></div>
       <div className={styles.assets}>
@@ -30,7 +38,7 @@ function MyPage(props) {
           <div>我的资产</div>
         </div>
         <div className={styles.assetBox}>
-          <div className={styles.item}>
+          <div className={styles.item} onClick={gotoAsset}>
             <div>流通信用分</div>
             <div>105622.00</div>
           </div>

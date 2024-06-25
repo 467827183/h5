@@ -18,8 +18,8 @@ export default function AboutPage() {
   const [fileList, setFileList] = useState([]);
   const [inputValue,setInputValue] = useState('')
   const [selectItem,setSelectItem] = useState([
-    {name:'虚假转账凭证',status:false,line:'rgba(247, 181, 0, 1)',type:2},
-    {name:'转账金额不足',status:false,line:'rgba(0, 160, 232, 1)',type:3},
+    {name:'收入',status:false,line:'rgba(247, 181, 0, 1)',type:2},
+    {name:'支出',status:false,line:'rgba(0, 160, 232, 1)',type:3},
   ])
   function mockUpload(file) {
     return {
@@ -39,9 +39,7 @@ export default function AboutPage() {
       return file;
     }
   };
-  const TextAreafun = (e) => {
-    setText(e);
-  };
+
   const submit = () =>{
     const newArr = [...selectItem]
     let result = newArr.filter(item=>{
@@ -67,6 +65,9 @@ export default function AboutPage() {
     newArr[index].status = true
     setSelectItem(newArr)
   }
+  const TextAreafun = (e) => {
+    setText(e);
+  };
   // const navigate = useNavigate();
   return (
     <div className={styles.outBox}>
@@ -86,7 +87,7 @@ export default function AboutPage() {
         }}
       >
         <div>
-          <div className={styles.popHeader}>申述类型</div>
+          <div className={styles.popHeader}>申诉类型</div>
           {selectItem.map((item, index) => {
             return (
               <div
@@ -117,9 +118,9 @@ export default function AboutPage() {
         <Header name={"申诉"} />
       </div>
       <div className={styles.contentBox}>
-        <div className={styles.title}>申述类型</div>
+        <div className={styles.title}>申诉类型</div>
         <div className={styles.inputBox} onClick={()=>setVisible(true)}>
-          <Input placeholder="选择申述类型" value={inputValue} readOnly />
+          <Input placeholder="选择申诉类型" value={inputValue} readOnly />
           <img src={arrow_down}></img>
         </div>
         <div className={styles.title}>申诉原因</div>

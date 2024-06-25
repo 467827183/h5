@@ -27,6 +27,10 @@ export default defineConfig({
     { path: "/order/:type", component: "@/pages/order" },
     { path: "/orderDetail/:type/:status", component: "@/pages/orderDetail" },
     { path: "/appeal/:id", component: "@/pages/appeal" },
+    { path: "/dcp", component: "@/pages/dcp" },
+    { path: "/transferDcp", component: "@/pages/transferDcp" },
+    { path: "/transferRecord", component: "@/pages/transferRecord" },
+    { path: "/assetDetail/:type", component: "@/pages/assetDetail" },
   ],
   define: {
     baseApi: "https://apidev.somedomain.com",
