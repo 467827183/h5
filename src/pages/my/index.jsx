@@ -16,6 +16,12 @@ function MyPage(props) {
   const gotoAsset = ()=>[
     navigate('/assetDetail/1')
   ]
+  const gotoAccount =() =>{
+    navigate('/account')
+  }
+  const gotoSetting =()=>{
+    navigate('/setting')
+  }
   return (
     <div className={styles.box}>
       <div className={styles.headerPic}>
@@ -55,7 +61,7 @@ function MyPage(props) {
       <div className={styles.line}></div>
       <div className={styles.menu}>
         <div className={styles.item}>
-          <div className={styles.left}>
+          <div className={styles.left} onClick={gotoAccount}>
               <img src={accout}></img>
               <div>收款账号管理</div>
           </div>
@@ -68,7 +74,7 @@ function MyPage(props) {
           </div>
           <img src={arrow_right} className={styles.right}></img>
         </div>
-        <div className={styles.item}>
+        <div className={styles.item} onClick={gotoSetting}>
           <div className={styles.left}>
               <img src={set}></img>
               <div>设置</div>

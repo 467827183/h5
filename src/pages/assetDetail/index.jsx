@@ -7,7 +7,7 @@ import transfer from "../../assets/transfer.png";
 import Header from '@/components/Header'
 import { useNavigate } from "react-router-dom";
 import close from "../../assets/icon_close.png";
-import { Form, Input, PullToRefresh, InfiniteScroll, Popup, DatePickerView } from 'antd-mobile'
+import { Form, Toast, PullToRefresh, InfiniteScroll, Popup, DatePickerView } from 'antd-mobile'
 import { LeftOutline } from 'antd-mobile-icons'
 import { BrowserRouter as Router, Route, Link, useParams } from 'react-router-dom';
 import clean from "../../assets/clean.png";
@@ -22,6 +22,7 @@ const endDate = currentDate.endOf('month')
 export default function AboutPage() {
   const { type } = useParams();
   const [status, setStatus] = useState(1)
+  const [currentTime, setCurrentTime] = useState(1)
   const [hasMore, setHasMore] = useState(false)
   const [visible, setVisible] = useState(false)
   const navigate = useNavigate();
@@ -30,10 +31,13 @@ export default function AboutPage() {
     { name: '虚假转账凭证', status: false, line: 'rgba(247, 181, 0, 1)', type: 2 },
     { name: '转账金额不足', status: false, line: 'rgba(0, 160, 232, 1)', type: 3 },
   ])
+  const [timeStatus,setTimeStatus] = useState(false)
   const minDate = new Date();
   minDate.setMonth(minDate.getMonth() - 1);
   const maxDate = new Date();
   const now = new Date()
+  const [leftTime,setLeftTime] = useState(now)
+  const [rightTime,setRightTime] = useState(now)
   const [value, setValue] = useState(now)
   const handleClick = () => {
     // 返回上一页
@@ -68,26 +72,55 @@ export default function AboutPage() {
     newArr[index].status = true
     setSelectItem(newArr)
   }
-  const setTime = () =>{
-    console.log(moment('2024-06-22'), '123123')
+  const setTime1 = () =>{
     setValue(moment('2024-06-22')._d)
+    setCurrentTime(1)
+  }
+  const setTime2 = () =>{
+    setValue(moment('2024-06-22')._d)
+    setCurrentTime(2)
+  }
+
+  const timeClose = () =>{
+    const left = moment(leftTime)
+    const right = moment(rightTime)
+    if(left.isAfter(right)){
+      Toast.show({
+        content: "结束时间不能大于开始时间",
+        duration: 3000,
+        maskClassName:'special'
+      });
+      return
+    }
+    setTimeStatus(false)
   }
   return (
     <div className={styles.outBox}>
-      <Popup visible={true}>
+      <Popup visible={timeStatus}>
         <div className={styles.header}>
-
+          <div className={styles.itemd} onClick={setTime1}>
+            <div style={{color:currentTime == 1?'#2DBF64':'black'}}>开始日期 </div>
+            <div>{moment(leftTime).format('YYYY-MM-DD')}</div>
+          </div>
+          <div className={styles.line}></div>
+          <div className={styles.itemd} onClick={setTime2}>
+            <div style={{color:currentTime == 2?'#2DBF64':'black'}}> 结束日期</div>
+            <div>{moment(rightTime).format('YYYY-MM-DD')}</div>
+          </div>
         </div>
-        <div onClick={setTime}>123123</div>
         <DatePickerView
           value={value}
            min={minDate}
           max={maxDate}
           onChange={val => {
-            setValue(val)
-            console.log('onChange', moment(val).format("YYYY-MM-DD"))
+            if(currentTime == 1){
+              setLeftTime(val)
+            } else {
+              setRightTime(val)
+            }
           }}
         />
+        <div className={styles.btns} onClick={timeClose}>确定</div>
       </Popup>
       <Popup
         visible={visible}
@@ -150,12 +183,8 @@ export default function AboutPage() {
             <div>类型</div>
             <img src={dropDown}></img>
           </div>
-          <div className={styles.right_select} onClick={() => { setVisible(true) }}>
-            <div>开始日期</div>
-            <img src={dropDown}></img>
-          </div>
-          <div className={styles.right_select} onClick={() => { setVisible(true) }}>
-            <div>结束日期</div>
+          <div className={styles.right_select} onClick={() => { setTimeStatus(true) }}>
+            <div>日期</div>
             <img src={dropDown}></img>
           </div>
         </div>

@@ -1,42 +1,156 @@
-import { Checkbox, Input, Button, NavBar } from "antd-mobile";
+import { Checkbox, Input, Button, Popup } from "antd-mobile";
 import { useState } from "react";
 import { getCaptcha, getCaptchaMock } from "@/api/user.js";
 import { useNavigate } from "react-router-dom";
 import styles from "@/assets/css/login.less";
+import logo from '@/assets/logo.png'
 export default function LoginPage() {
-  const getCaptchaFunc = () => {
-    getCaptcha();
-    getCaptchaMock();
-  };
+  const [type, setType] = useState(1)
+  const [type2, setType2] = useState(1)
+  const [visible, setVisible] = useState(false)
+  const [text, setText] = useState('')
+  const [areCode,setArecCode] =useState(86)
+  const [codeSent, setCodeSent] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [password,setPassword] = useState('')
   const navigate = useNavigate();
+  const [countdown, setCountdown] = useState(0);
+  const checkType = (type) => {
+    setType(type)
+  }
+  const checkType2 = (type) => {
+    setType2(type)
+  }
+  const TextAreafun = (e) => {
+    setText(e)
+  }
+  const handleChangePhone = (e) => {
+    setPhone(e);
+  };
+  const handlepassword = (e) => {
+    setPassword(e);
+  };
+  const handleGetCode = () => {
+    if(codeSent){
+
+      return
+    }
+    // 这里可以调用发送验证码的API，这里使用setTimeout模拟异步请求
+    // 假设请求成功后会收到一个确认信息或者成功状态
+    // 在真实应用中，请替换成实际的请求逻辑
+    setTimeout(() => {
+      // 假设请求成功后开始倒计时60秒
+      setCodeSent(true);
+      setCountdown(60);
+
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(timer);
+            setCodeSent(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }, 1000); // 假设这里模拟请求发送的延迟
+  };
+  const loginFun = () =>{
+
+  }
+  const submit = () =>{
+    setVisible(false);
+  }
   return (
-    <>
-      <NavBar
-        back="返回"
-        style={{
-          "--height": "64px",
+    <div className={styles.outBOx}>
+            <Popup
+        visible={visible}
+        onMaskClick={() => {
+          setVisible(false);
         }}
-        onBack={() => navigate(-1)}
+        bodyStyle={{
+          borderTopLeftRadius: "8px",
+          borderTopRightRadius: "8px",
+          minHeight: "80vh",
+          padding: "24px 15px 18px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
       >
-        标题
-      </NavBar>
-      <div className={styles.loginContainer}>
-        <div className={styles.loginBg}></div>
-        <div className={`${styles.loginBody} ${styles.login}`}>
-          <div className={styles.loginSub}>
-            <Button
-              block
-              style={{
-                "--border-radius": "100px",
-              }}
-              size="large"
-              onClick={getCaptchaFunc}
-            >
-              获取验证码
-            </Button>
+        <div>
+          <div className={styles.popHeader}>选择国家或地区</div>
+          <div className={styles.items}>
+            <div className={styles.title}>中国</div>
+            <div className={styles.number}>+86</div>
+          </div>
+          <div className={styles.items}>
+            <div className={styles.title}>中国</div>
+            <div className={styles.number}>+86</div>
+          </div>
+          <div className={styles.items}>
+            <div className={styles.title}>中国</div>
+            <div className={styles.number}>+86</div>
           </div>
         </div>
+        <div className={styles.bottomBox}>
+          <div className={styles.btnRight} onClick={submit}>
+            确认
+          </div>
+        </div>
+      </Popup>
+      <img src={logo} className={styles.logo} />
+      <div className={styles.title}>登录</div>
+      <div className={styles.tab}>
+        <div className={type == 1 && styles.active} onClick={() => checkType(1)}>手机号</div>
+        <div className={type == 2 && styles.active} onClick={() => checkType(2)}>邮箱</div>
       </div>
-    </>
+      {
+        type == 1 && <div className={styles.inputBox}>
+          <div style={{display:'flex',alignItems:'center'}} onClick={()=>setVisible(true)}>
+            <div>+{areCode}</div>
+            <div className={styles.box}></div>
+          </div>
+
+          <div className={styles.line}></div>
+          <Input
+            value={text}
+            placeholder='请输入手机号'
+            clearable
+            onChange={TextAreafun}
+          />
+        </div>
+      }
+      {
+        type == 2 && <div className={styles.inputBox}>
+          <Input
+            value={text}
+            placeholder='请输入邮箱'
+            onChange={TextAreafun}
+          />
+        </div>
+      }
+      <div className={styles.tabBox}>
+        <div className={type2 == 1 && styles.active} onClick={() => checkType2(1)}>验证码登录</div>
+        <div className={styles.special}>/</div>
+        <div className={type2 == 2 && styles.active} onClick={() => checkType2(2)}>密码登录</div>
+      </div>
+      {
+        type2 == 1&&<div>
+          <div className={styles.inputBox}>
+            <Input placeholder='请输入验证码' clearable style={{'flex':'1'}} value={phone}  onChange={handleChangePhone}/>
+            <div className={styles.time} onClick={handleGetCode}>{codeSent ? `重新发送(${countdown}s)` : '获取验证码'}</div>
+          </div>
+        </div>
+      }
+      {
+        type2 == 2&&<div>
+          <div className={styles.inputBox}>
+            <Input placeholder='请输入密码' type="password" clearable  value={password}  onChange={handlepassword}/>
+          </div>
+        </div>
+      }
+      <div className={styles.login} onClick={loginFun}>登录</div>
+    </div>
   );
 }

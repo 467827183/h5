@@ -1,5 +1,174 @@
-.loginContainer {
+.outBOx{
+  padding: 60px 20px 0;
+  .logo{
+    width: 135px;
+    height: 30px;
+    margin-bottom: 20px;
+  }
+  .title{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 27px;
+    color: #000000;
+    line-height: 38px;
+    text-align: left;
+    font-style: normal;
+    margin-bottom: 52px;
+  }
+  .tab{
+    display: flex;
+    align-items: center;
+    margin-bottom: 19px;
+    div{
+      font-family: PingFangSC, PingFang SC;
+      font-weight: normal;
+      font-size: 18px;
+      color: #999999;
+      line-height: 25px;
+      text-align: left;
+      font-style: normal;
+    }
+    :nth-child(1){
+      margin-right: 22px;
+    }
+    .active{
+      color: #000000;
+    }
+  }
+}
+.inputBox {
   position: relative;
-  background: #fff;
-  height: 100vh;
+  border-radius: 5px;
+  border: 1px solid #E8E8EB;
+  padding: 0 15px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  :global{
+    .adm-input-element{
+      font-size: 15px;
+    }
+  }
+  img{
+    position: absolute;
+    width: 12px;
+    height: 8px;
+    right: 17px;
+    top: 22px;
+  }
+  .line{
+    width: 1px;
+    height: 20px;
+    background: #E8E8EB;
+    margin: 0 17px;
+  }
+  .box{
+    width: 8px;
+    height: 6px;
+    background: #000000;
+    margin-left: 6px;
+  }
+}
+
+.inputBox:hover
+{
+border-color:#000000;
+}
+.tabBox{
+  display: flex;
+  align-items: flex-end;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  font-size: 12px;
+  color: #999999;
+  line-height: 17px;
+  text-align: left;
+  font-style: normal;
+  margin-bottom: 9px;
+  .active{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+    line-height: 20px;
+    text-align: left;
+    font-style: normal;
+  }
+}
+.time {
+  height: 24px;
+  text-align: center;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  font-size: 15px;
+  color: #000000;
+  line-height: 24px;
+  text-align: left;
+  font-style: normal;
+}
+.special{
+  margin: 0 4px;
+}
+.login{
+  width: 100%;
+  height: 45px;
+  background: #000000;
+  border-radius: 23px;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+  font-size: 14px;
+  color: #FFFFFF;
+  line-height: 45px;
+  text-align: center;
+  font-style: normal;
+  margin-top: 60px;
+}
+.popHeader {
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  font-size: 16px;
+  color: #000000;
+  line-height: 22px;
+  text-align: left;
+  font-style: normal;
+  margin-bottom: 13px;
+}
+.btnRight {
+  width: 100%;
+  height: 45px;
+  background: #000000;
+  border-radius: 23px;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  font-size: 14px;
+  color: #FFFFFF;
+  line-height: 45px;
+  text-align: center;
+  font-style: normal;
+}
+.items{
+  width: 100%;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .title{
+    font-family: PingFangSC, PingFang SC;
+font-weight: 400;
+font-size: 14px;
+color: #000000;
+line-height: 47px;
+text-align: left;
+font-style: normal;
+  }
+  .number{
+    font-family: PingFangSC, PingFang SC;
+font-weight: 400;
+font-size: 14px;
+color: #000000;
+line-height: 47px;
+text-align: right;
+font-style: normal;
+  }
 }
