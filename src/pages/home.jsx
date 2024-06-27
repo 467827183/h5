@@ -38,6 +38,9 @@ const Home = () => {
   const gotoDetial = ()=>{
     navigate('/notice');
   }
+  const goto = (id) =>{
+    navigate(`/listDetail/${id}`);
+  }
   return (
     <div className={styles.indexContainer}>
       <div className={styles.logoBox}>
@@ -64,7 +67,7 @@ const Home = () => {
       {
         news.map((item,index)=>{
           return(
-            <div key={index} className={styles.newsItme}>
+            <div key={index} className={styles.newsItme} onClick={()=>goto(item.id)}>
               <div className={styles.titles}>{item.title}</div>
               <div className={styles.time}>{item.time}</div>
             </div>

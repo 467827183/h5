@@ -35,6 +35,7 @@ export default defineConfig({
     { path: "/accountDetail/:type", component: "@/pages/accountDetail" },
     { path: "/setAccount/:type", component: "@/pages/setAccount" },
     { path: "/setting", component: "@/pages/setting" },
+    { path: "/listDetail/:id", component: "@/pages/listDetail" },
   ],
   define: {
     baseApi: "https://apidev.somedomain.com",

@@ -1,7 +1,9 @@
 import {useState} from "react";
 import styles from "./index.less";
 import Header from '@/components/Header'
+import { useNavigate, useParams } from "react-router-dom";
 export default function AboutPage() {
+  const navigate = useNavigate();
   const [news,setNews] = useState(
     [
       {title:'Tideswap关于 ETH 的币本位 7月5日、7月26日、8月29日交割合约正式上线的公告',time:'2024/06/11 15:25:00'},
@@ -12,6 +14,9 @@ export default function AboutPage() {
       {title:'Tideswap关于 ETH 的币本位',time:'2024/06/11 15:25:00'},
     ]
   )
+  const goto = (id) =>{
+    navigate(`/listDetail/${id}`);
+  }
   return (
     <div className={styles.box}>
       <Header/>
@@ -20,7 +25,7 @@ export default function AboutPage() {
         {
           news.map((item,index)=>{
             return(
-              <div key={index} className={styles.newsItme}>
+              <div key={index} className={styles.newsItme} onClick={()=>goto(item.id)}>
                 <div className={styles.titles}>{item.title}</div>
                 <div className={styles.time}>{item.time}</div>
               </div>
