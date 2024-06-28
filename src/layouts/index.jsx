@@ -3,7 +3,7 @@ import { useNavigate, matchRoutes, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import router from "../config/routers";
 import "lib-flexible";
-import { TabBar, SafeArea } from "antd-mobile";
+import { TabBar, SafeArea, Toast } from "antd-mobile";
 import { AppOutline, HeartOutline, UserOutline } from "antd-mobile-icons";
 import "normalize.css/normalize.css"; //全局引入
 import styles from "./index.less";
@@ -14,6 +14,7 @@ import flow from "../assets/flow.png";
 import transactionActive from "../assets/transaction_active.png";
 import transaction from "../assets/transaction.png";
 import myActive from "../assets/my_active.png";
+import { axiosCustom,storage } from "@/Common";
 import my from "../assets/my.png";
 export default function Layout() {
   const location = useLocation();
@@ -21,6 +22,7 @@ export default function Layout() {
   const [defaultOpenKeys, setDefaultOpenKeys] = useState([]);
   const [isInit, setIsInit] = useState(false);
   const navigate = useNavigate();
+  const [userInfo,setUserInfo] = useState({})
   const { pathname } = location;
   useEffect(() => {
     console.log(router, location.pathname);
@@ -38,12 +40,28 @@ export default function Layout() {
     setDefaultOpenKeys(pathArr);
     setIsInit(true);
   }, [location.pathname]);
+  useEffect(()=>{
+    axiosCustom({ cmd: "/user/info" }).then(res => {
+      setUserInfo(res.user)
+    })
+  },[])
   if (!isInit) {
     return null;
   }
 
   const setRouteActive = (value) => {
-    navigate(value);
+    if(value == '/flow'){
+      if(userInfo.pay_password){
+        navigate(value);
+      } else {
+        Toast.show('请设置支付密码')
+      }
+    } else {
+      navigate(value);
+    }
+    // if(value)
+    console.log(value,userInfo.pay_password)
+    
   };
   const imgItem = (name)=>{
     return <img src={name} style={{width:'100%',height:'100%'}}/>

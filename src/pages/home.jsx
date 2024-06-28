@@ -12,14 +12,15 @@ const Home = () => {
     [
     ]
   )
+
   const [banner,setBanner] = useState([])
   useEffect(()=>{
     axiosCustom({ cmd: "/home/home" }).then(res => {
       // setCountry(res)
       setBanner(res.banner)
       setNews(res.notice)
-      console.log(res,' res++++')
     })
+
   },[])
   const navigate = useNavigate();
   const items = banner.map((item, index) => (

@@ -30,7 +30,7 @@ export function axiosCustom({
         resolve(resData.data);
       } else {
         console.log(res, "res=+++");
-        Toast.show(resData.message);
+        Toast.show({content:resData.message,maskStyle:{"--z-index":10000000},duration:0});
         reject({
           cmd: api + cmd,
           method: method,

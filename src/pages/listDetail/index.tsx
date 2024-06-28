@@ -11,7 +11,6 @@ export default function AboutPage() {
     console.log(id, 'id')
     axiosCustom({ cmd: "/notice/info",params:{id} }).then(res => {
       setContent(res)
-      console.log(res, 'res+++')
     })
   },[])
   return (
