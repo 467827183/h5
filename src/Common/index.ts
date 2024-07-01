@@ -43,6 +43,7 @@ export function axiosCustom({
       console.log(e, 'e+++')
       const status = e?.response?.status
       if(status === 401){
+        storage.clear()
         Toast.show({content:'登录过期',maskStyle:{"--z-index":10000000},duration:5000});
         history.replace('/');
         window.location.reload();

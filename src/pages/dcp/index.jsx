@@ -80,7 +80,7 @@ export default function AboutPage() {
     commonRequest(type)
   }
   const gotoOrder = () => {
-    navigate('/order/1');
+    navigate(`/order/${status}`);
   }
   const gotoTransfer = () => [
     navigate('/transferDcp')

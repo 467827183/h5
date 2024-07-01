@@ -27,7 +27,7 @@ export default function AboutPage() {
   const [data, setData] = useState([])
 
   useEffect(()=>{
-    commonRequests(1)
+    commonRequests(type)
   },[])
   const commonRequests = (status) =>{
     let params =
@@ -35,7 +35,9 @@ export default function AboutPage() {
       page:1,
       size:10,
       type,
-      status,
+    }
+    if(status != 6){
+      params.status = status
     }
     axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
       setData(res.data)
@@ -81,6 +83,9 @@ export default function AboutPage() {
   }
 
   const gotoDetail = (item) => {
+    if(item.status!=1&&item.status!=2){
+      return
+    }
     navigate(`/orderDetail/${type}/${item.id}`);
   }
   return (
@@ -90,11 +95,11 @@ export default function AboutPage() {
       </div>
       <div className={styles.header}>
         <div className={styles.switchBox}>
-          <div className={`${status == 4 ? styles.noActive:styles.none} ${styles.itemBox} `} onClick={() => checkStatus(1)}>
+          <div className={`${status == 6 ? styles.noActive:styles.none} ${styles.itemBox} `} onClick={() => checkStatus(1)}>
             <div className={styles.name}>进行中</div>
             <div className={styles.line}></div>
           </div>
-          <div className={`${status == 1 ? styles.noActive:styles.none} ${styles.itemBox} `} onClick={() => checkStatus(4)}>
+          <div className={`${status == 1 ? styles.noActive:styles.none} ${styles.itemBox} `} onClick={() => checkStatus(6)}>
             <div className={styles.name}>已结束</div>
             <div className={styles.line}></div>
           </div>
@@ -111,7 +116,7 @@ export default function AboutPage() {
         <PullToRefresh
           style={{ minHeight: '100%' }}
           onRefresh={async () => {
-            commonRequests(1)
+            commonRequests(type)
           }}
         >
           <List style={{ flex: 1 }}>

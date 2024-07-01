@@ -158,7 +158,7 @@ export default function AboutPage() {
             <img src={imageEdit} className={styles.imges}></img>
           </ImageUploader>
         </div>
-        <div className={styles.email}>295***@163.com</div>
+        <div className={styles.email}>{info?.user?.login_name}</div>
       </div>
       <div className={styles.contentBox}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between", marginBottom: '30px' }}>

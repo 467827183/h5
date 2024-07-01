@@ -25,14 +25,14 @@ export default function AboutPage() {
   const navigate = useNavigate();
   const [data, setData] = useState([])
   useEffect(()=>{
-
+    originRequest()
   },[])
   const originRequest = () =>{
     let params =
     {
       page:1,
       size:10,
-      type:2
+      type:active
     }
     axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
       setCountPage(res.totalPage)

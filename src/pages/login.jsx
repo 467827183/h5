@@ -70,7 +70,7 @@ export default function LoginPage() {
     const res = await axiosCustom({
       cmd: "/sms/login-code", method: "put", data,
     })
-    Toast.show(res.message)
+    Toast.show('发送成功')
     setTimeout(() => {
       // 假设请求成功后开始倒计时60秒
       setCodeSent(true);

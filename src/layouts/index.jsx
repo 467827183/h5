@@ -40,7 +40,7 @@ export default function Layout() {
     setIsInit(true);
   }, [location.pathname]);
   useEffect(()=>{
-    if(location.pathname == '/'){
+    if(location.pathname == '/login'){
       return
     }
     axiosCustom({ cmd: "/user/info" }).then(res => {
@@ -53,11 +53,7 @@ export default function Layout() {
 
   const setRouteActive = (value) => {
     if(value == '/flow'){
-      if(userInfo.pay_password){
         navigate(value);
-      } else {
-        Toast.show('请设置支付密码')
-      }
     } else {
       navigate(value);
     }

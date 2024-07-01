@@ -21,13 +21,14 @@ export default function AboutPage() {
   const [selectItem,setSelectItem] = useState([
 
   ])
+  const navigate = useNavigate();
   const [path,setPath] = useState('')
   function mockUpload(file) {
     const headers = {
       'Content-Type': 'multipart/form-data'
     }
     const formData = new FormData();
-    formData.append('pre', 'face'); // 添加额外的参数
+    formData.append('pre', 'default'); // 添加额外的参数
     formData.append('file', file)
     // formData.append('file', file); // 'file' 是后端需要接收的字段名
     axiosCustom({ cmd: "/home/upload",method:'post',data:formData,headers }).then(res => {
@@ -69,14 +70,22 @@ export default function AboutPage() {
 
   }
   const overSubmit = () =>{
+    if(!text){
+      return Toast.show('请输入申诉原因')
+    }
+    const newArr = [...selectItem]
+    let result = newArr.filter(item=>{
+       return item.status
+    })
     let data = {
       order_number:id,
-      type,
+      type:result[0].type,
       reason:text,
-      deputy_image:path,
+      deputy_image:[path],
     }
     axiosCustom({ cmd: "/market-separate/report",method:'post',data }).then(res => {
-      navigator(`order/${type}`,{replace:true})
+      Toast.show('申诉成功')
+      navigate(`order/${type}`,{replace:true})
     })
   }
   const hashCopy = (hash) => {

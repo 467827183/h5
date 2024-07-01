@@ -25,7 +25,7 @@ export default defineConfig({
     { path: "/notice", component: "@/pages/notice" },
     { path: "/transaction/:type/:id", component: "@/pages/transaction" },
     { path: "/order/:type", component: "@/pages/order" },
-    { path: "/orderDetail/:type/:status", component: "@/pages/orderDetail" },
+    { path: "/orderDetail/:type/:id", component: "@/pages/orderDetail" },
     { path: "/appeal/:type/:id", component: "@/pages/appeal" },
     { path: "/dcp", component: "@/pages/dcp" },
     { path: "/transferDcp", component: "@/pages/transferDcp" },
