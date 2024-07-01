@@ -25,7 +25,6 @@ export default function Layout() {
   const [userInfo,setUserInfo] = useState({})
   const { pathname } = location;
   useEffect(() => {
-    console.log(router, location.pathname);
     const routes = matchRoutes(router.routes, location.pathname); // 返回匹配到的路由数组对象，每一个对象都是一个路由对象
     const pathArr = [];
     if (routes !== null) {
@@ -41,6 +40,9 @@ export default function Layout() {
     setIsInit(true);
   }, [location.pathname]);
   useEffect(()=>{
+    if(location.pathname == '/'){
+      return
+    }
     axiosCustom({ cmd: "/user/info" }).then(res => {
       setUserInfo(res.user)
     })
@@ -59,8 +61,6 @@ export default function Layout() {
     } else {
       navigate(value);
     }
-    // if(value)
-    console.log(value,userInfo.pay_password)
     
   };
   const imgItem = (name)=>{

@@ -4,23 +4,39 @@ import { useNavigate, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import tips_black from "../../assets/tips_black.png";
 import copy from "../../assets/copy.png";
-import { ImageUploader,Image } from "antd-mobile";
+import { ImageUploader,Image,CenterPopup,PasscodeInput, Toast } from "antd-mobile";
+import { axiosCustom, storage } from "@/Common";
 // import { lorem } from 'demos'
 // 1:待付款 2：交易中
 const demoSrc =
   "https://images.unsplash.com/photo-1567945716310-4745a6b7844b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=60";
 export default function AboutPage() {
-  const { type,status } = useParams();
+  const { type,id } = useParams();
   const [fileList, setFileList] = useState([]);
+  const [info,setInfo] = useState({})
+  const [subVisible, setSubVisible] = useState(false)
+  const [inputValue,setInputValue] = useState('')
+  const [error, setError] = useState(false)
+  const [fileData,setFileData] = useState('')
   function mockUpload(file) {
     console.log(file, "files");
+    setFileData(file)
     return {
       url: URL.createObjectURL(file),
     };
   }
+  useEffect(()=>{
+    let params = {
+      id
+    }
+    axiosCustom({ cmd: "/market-separate/order",params }).then(res => {
+      setInfo(res)
+      console.log(res, 'res++++')
+    })
+  },[])
   const navigate = useNavigate();
-  const gotoAppeal = () =>{
-    navigate('/appeal/1')
+  const gotoAppeal = (orderNumber) =>{
+    navigate(`/appeal/${type}/${orderNumber}`)
   }
   const  hashCopy = (hash) => {
     const copyInput = document.createElement("input");
@@ -30,9 +46,73 @@ export default function AboutPage() {
     document.execCommand("copy");
     document.body.removeChild(copyInput);
   }
+  const overSubmit = () =>{
+    setSubVisible(true)
+  }
+  const onChange = (value) => {
+    setError(false)
+    setInputValue(value)
+  }
+  const modelClose2 = () => {
+    setInputValue('')
+    setSubVisible(false)
+  }
+  const modelCloseInput1 = () => {
+    if(inputValue.length<6){
+      setError(true)
+    } else{
+      let data = {
+        id,
+        pay_password:inputValue
+      }
+      axiosCustom({ cmd: "/market-separate/buy-confirm",method:'post',data }).then((res) => {
+        Toast.show('确认完成')
+        setInputValue('')
+        navigate('-1',{replace:true})
+      })
+    }
+  }
+  const modelCloseInput2 = () => {
+    if(inputValue.length<6){
+      setError(true)
+    } else{
+      const headers = {
+        'Content-Type': 'multipart/form-data'
+      }
+      const formData = new FormData();
+      formData.append('id', id); // 添加额外的参数
+      formData.append('file', fileData)
+      formData.append('pay_password', inputValue)
+      // formData.append('file', file); // 'file' 是后端需要接收的字段名
+      axiosCustom({ cmd: "/market-separate/buy-pay",method:'post',data:formData,headers }).then(res => {
+        Toast.show('确认完成')
+        setInputValue('')
+        navigate('-1',{replace:true})
+      })  
+    }
+  }
   // const navigate = useNavigate();
   return (
     <div className={styles.outBox}>
+      <CenterPopup
+        visible={subVisible}
+        style={{'--z-index':'10000000'}}
+        onMaskClick={() => {
+          setSubVisible(false)
+        }}
+      >
+        <div className={styles.popBox} style={{ padding: '27px 20px 22px' }}>
+          <img src={close} className={styles.close} onClick={modelClose2}></img>
+          <div className={styles.title} style={{ marginBottom: '32px' }}>请输入支付密码</div>
+          <PasscodeInput seperated style={{ marginBottom: '32px' }}  onChange={onChange}
+          value={inputValue}
+            error={error} />
+          <div className={styles.know} onClick={modelCloseInput1} style={{ width: '100%' }}>
+            确认
+          </div>
+        </div>
+        {/* <div className={styles.myContent}>Hello</div> */}
+      </CenterPopup>
       <div style={{ padding: "0 14px", marginBottom: "42px" }}>
         <Header name={"订单详情"} />
       </div>
@@ -81,8 +161,7 @@ export default function AboutPage() {
         </div>
         <div className={styles.bigTips}>
           <img src={tips_black}></img>
-          <div className={styles.content}>
-            注：计时结束前未确认支付，订单将自动取消。请勿在订单即将结束时进行支付，因超时无法提交支付造成损失由自己承担
+          <div className={styles.content} dangerouslySetInnerHTML={{ __html: info?.mark }}>
           </div>
         </div>
       </div>
@@ -196,8 +275,8 @@ export default function AboutPage() {
           </div>
           <div className={styles.lines} style={{ height: "1px" }}></div>
           <div className={styles.submit}>
-            <div className={styles.leftBtn} onClick={gotoAppeal}>申诉</div>
-            <div className={styles.btn}>确认收货</div>
+            <div className={styles.leftBtn} onClick={()=>gotoAppeal(info.order_number)}>申诉</div>
+            <div className={styles.btn} onClick={()=>overSubmit()}>确认收货</div>
           </div>
         </div>
       )}

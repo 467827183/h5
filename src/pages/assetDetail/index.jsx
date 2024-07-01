@@ -12,6 +12,7 @@ import { LeftOutline } from 'antd-mobile-icons'
 import { BrowserRouter as Router, Route, Link, useParams } from 'react-router-dom';
 import clean from "../../assets/clean.png";
 import check from "../../assets/check.png";
+import { axiosCustom, storage } from "@/Common";
 import moment from 'moment';
 import unCheck from "../../assets/unCheck.png";
 const currentDate = moment();
@@ -26,43 +27,107 @@ export default function AboutPage() {
   const [hasMore, setHasMore] = useState(false)
   const [visible, setVisible] = useState(false)
   const navigate = useNavigate();
-  const [data, setData] = useState(() => getNextData())
+  const [data, setData] = useState([])
   const [selectItem, setSelectItem] = useState([
-    { name: '虚假转账凭证', status: false, line: 'rgba(247, 181, 0, 1)', type: 2 },
-    { name: '转账金额不足', status: false, line: 'rgba(0, 160, 232, 1)', type: 3 },
+    { name: '收入', status: false, line: 'rgba(247, 181, 0, 1)', type: 1 },
+    { name: '支出', status: false, line: 'rgba(0, 160, 232, 1)', type: 2 },
   ])
+  const par = {
+    1:"流通信用分",
+    2:'通证DCP',
+    3:"消费通证"
+  }
   const [timeStatus,setTimeStatus] = useState(false)
   const minDate = new Date();
   minDate.setMonth(minDate.getMonth() - 1);
   const maxDate = new Date();
   const now = new Date()
+  const [dataInfo,setDataInfo] = useState({})
   const [leftTime,setLeftTime] = useState(now)
   const [rightTime,setRightTime] = useState(now)
   const [value, setValue] = useState(now)
+  const [currentPage,setCurrentPage] = useState(1)
+  useEffect(()=>{
+    commonRequest(1)
+  },[])
+  const commonRequest = (page) =>{
+    const newArr = [...selectItem]
+    let result = newArr.filter(item => {
+      return item.status
+    })
+    let params = {
+      page,
+      size:7,
+      type,
+      start:moment(now).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+      end:moment(now).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+    }
+    if(result.length>0){
+      params.change_type = result[0].type
+    }
+    axiosCustom({ cmd: "/prop/list",params }).then(res => {
+      setCurrentPage(res.page == 0?1:res.page)
+      setDataInfo(res)
+      setHasMore(res.page +1 <= res.totalPage)
+      setData(res.data)
+    })  
+  }
+  const commonRequest1 = (isMore = false) =>{
+    const newArr = [...selectItem]
+    let result = newArr.filter(item => {
+      return item.status
+    })
+    let params = {
+      page:currentPage,
+      size:7,
+      type,
+      start:moment(leftTime).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+      end:moment(rightTime).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+    }
+    console.log(result, 'result')
+    if(result.length>0){
+      params.change_type = result[0].type
+    }
+    axiosCustom({ cmd: "/prop/list",params }).then(res => {
+      setCurrentPage(res.page == 0?1:res.page)
+      setDataInfo(res)
+      setHasMore(res.page < res.totalPage)
+      if(isMore){
+        setData([...data,...res.data])
+      } else {
+      setData(res.data)
+    } 
+    })  
+  }
+  const resetSearch = () =>{
+    const newArr = [...selectItem]
+    newArr.forEach(item => {
+      item.status = false
+    })
+    
+    setCurrentPage(()=>1)
+    setSelectItem(newArr)
+    setLeftTime(()=>now)
+    setRightTime(()=>now)
+    setValue(now)
+    commonRequest(1)
+  }
   const handleClick = () => {
     // 返回上一页
     navigate(-1);
   };
   const submit = () => {
-    const newArr = [...selectItem]
-    let result = newArr.filter(item => {
-      return item.status
-    })
-    // setInputValue(result[0].name)
+    commonRequest1()
     setVisible(false);
 
   }
   async function loadMore() {
+    setCurrentPage(currentPage+1)
+    commonRequest1(true)
     // const append = await mockRequest()
     // setData(val => [...val, ...append])
-    setHasMore(data.length > 0)
-  }
-  function getNextData() {
-    const ret = []
-    for (let i = 0; i < 18; i++) {
-      ret.unshift({ name: i })
-    }
-    return ret
+
+
   }
   const itemClick = (index) => {
     const newArr = [...selectItem]
@@ -92,6 +157,7 @@ export default function AboutPage() {
       });
       return
     }
+    commonRequest1()
     setTimeStatus(false)
   }
   return (
@@ -113,6 +179,7 @@ export default function AboutPage() {
            min={minDate}
           max={maxDate}
           onChange={val => {
+            setValue(val)
             if(currentTime == 1){
               setLeftTime(val)
             } else {
@@ -172,8 +239,8 @@ export default function AboutPage() {
         </div>
         <div className={styles.numberBox}>
           <div className={styles.items}>
-            <div>流通信用分</div>
-            <div>2662685.66</div>
+            <div>{par[type]}</div>
+            <div>{dataInfo?.num}</div>
           </div>
         </div>
       </div>
@@ -188,29 +255,29 @@ export default function AboutPage() {
             <img src={dropDown}></img>
           </div>
         </div>
-        <img src={clean}></img>
+        <img src={clean} onClick={resetSearch}></img>
       </div>
       <PullToRefresh
-        style={{ minHeight: '100%' }}
+        // style={{ minHeight: '100%' }}
         onRefresh={async () => {
-          await sleep(1000)
-          setData([...getNextData(), ...data])
+          commonRequest(1)
         }}
       >
-
         <div className={styles.scrollBox}>
-          <div style={{ flex: 1 }}>
+          {/* <div style={{ flex: 1 }}> */}
             {data.map((item, index) => (
               <div key={index} className={styles.itembox} >
+                
                 <div className={styles.leftBox}>
-                  <div>转赠至139****6426</div>
-                  <div>2023-08-11 15:25:00</div>
+                  <div>{item.change_tag}</div>
+                  <div>{item.change_time}</div>
                 </div>
-                <div className={styles.rightBox}>2650.00 DCP</div>
+                <div className={styles.rightBox}>{item.num}</div>
               </div>
             ))}
-          </div>
-          <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+          {/* </div> */}
+          
+          <InfiniteScroll loadMore={loadMore} hasMore={hasMore} threshold={10}/>
         </div>
       </PullToRefresh>
     </div>

@@ -8,25 +8,44 @@ import { ImageUploader, Toast, Input, TextArea,Popup } from "antd-mobile";
 // import { lorem } from 'demos'
 import check from "../../assets/check.png";
 import unCheck from "../../assets/unCheck.png";
+import { axiosCustom, storage } from "@/Common";
 // 1:待付款 2：交易中
 const demoSrc =
   "https://images.unsplash.com/photo-1567945716310-4745a6b7844b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=60";
 export default function AboutPage() {
-  const { type, status } = useParams();
+  const { type, id } = useParams();
   const [visible, setVisible] = useState(false)
   const [text, setText] = useState("");
   const [fileList, setFileList] = useState([]);
   const [inputValue,setInputValue] = useState('')
   const [selectItem,setSelectItem] = useState([
-    {name:'收入',status:false,line:'rgba(247, 181, 0, 1)',type:2},
-    {name:'支出',status:false,line:'rgba(0, 160, 232, 1)',type:3},
+
   ])
+  const [path,setPath] = useState('')
   function mockUpload(file) {
+    const headers = {
+      'Content-Type': 'multipart/form-data'
+    }
+    const formData = new FormData();
+    formData.append('pre', 'face'); // 添加额外的参数
+    formData.append('file', file)
+    // formData.append('file', file); // 'file' 是后端需要接收的字段名
+    axiosCustom({ cmd: "/home/upload",method:'post',data:formData,headers }).then(res => {
+      setPath(res.path)
+  })  
     return {
       url: URL.createObjectURL(file),
     };
   }
-
+  useEffect(()=>{
+    axiosCustom({ cmd: "/market-separate/report-type" }).then(res => {
+      const newArr = []
+      res.forEach(item=>{
+        newArr.push({name:item.name,type:item.value,status:false})
+      })
+      setSelectItem(newArr)
+    })
+  },[])
   const beforeUp = (file, files) => {
     const allowedTypes = ["image/png", "image/jpg", "image/pdf"];
     const selectedFile = files;
@@ -48,6 +67,17 @@ export default function AboutPage() {
     setInputValue(result[0].name)
     setVisible(false);
 
+  }
+  const overSubmit = () =>{
+    let data = {
+      order_number:id,
+      type,
+      reason:text,
+      deputy_image:path,
+    }
+    axiosCustom({ cmd: "/market-separate/report",method:'post',data }).then(res => {
+      navigator(`order/${type}`,{replace:true})
+    })
   }
   const hashCopy = (hash) => {
     const copyInput = document.createElement("input");
@@ -147,7 +177,7 @@ export default function AboutPage() {
         <div className={styles.tips1}>
           添加相关转账证明或证明材料（仅支持png、jpg、pdf格式）
         </div>
-        <div className={styles.btns}>提交申述</div>
+        <div className={styles.btns} onClick={overSubmit}>提交申述</div>
       </div>
     </div>
   );

@@ -22,6 +22,10 @@ export default function LoginPage() {
     axiosCustom({ cmd: "/home/country" }).then(res => {
       setCountry(res)
     })
+    let res = storage.get('token')
+    if(res){
+      navigate('/home')
+    }
     // console.log(res, 'res+++')
   }, [])
   const checkType = (type) => {

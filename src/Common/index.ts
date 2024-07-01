@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Toast } from "antd-mobile";
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 export function axiosCustom({
   api = "https://test-api.tideswap.io/v1",
   cmd = "",
@@ -29,8 +31,7 @@ export function axiosCustom({
       if (resData.status === 0) {
         resolve(resData.data);
       } else {
-        console.log(res, "res=+++");
-        Toast.show({content:resData.message,maskStyle:{"--z-index":10000000},duration:0});
+        Toast.show({content:resData.message,maskStyle:{"--z-index":10000000},duration:5000});
         reject({
           cmd: api + cmd,
           method: method,
@@ -38,7 +39,15 @@ export function axiosCustom({
           code: resData.code,
         });
       }
-    } catch (e) {
+    } catch (e:any) {
+      console.log(e, 'e+++')
+      const status = e?.response?.status
+      if(status === 401){
+        Toast.show({content:'登录过期',maskStyle:{"--z-index":10000000},duration:5000});
+        history.replace('/');
+        window.location.reload();
+
+      } else
       reject({
         cmd: api + cmd,
         method: method,

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import close from "../../assets/icon_close.png";
 import { Form, Input, PullToRefresh,InfiniteScroll } from 'antd-mobile'
 import { LeftOutline } from 'antd-mobile-icons'
+import { axiosCustom } from "@/Common";
 import { BrowserRouter as Router, Route, Link, useParams } from 'react-router-dom';
 import order from "../../assets/record.png";
 // import { lorem } from 'demos'
@@ -16,16 +17,39 @@ export default function AboutPage() {
   const { type } = useParams();
   const [status, setStatus] = useState(1)
   const [hasMore, setHasMore] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [countPage,setCountPage] = useState(1)
   const navigate = useNavigate();
-  const [data, setData] = useState(() => getNextData())
+  const [data, setData] = useState([])
   const handleClick = () => {
     // 返回上一页
     navigate(-1);
   };
+  useEffect(() => {
+    let params = {
+      page:1,
+      size:20,
+      type:1
+    }
+    axiosCustom({ cmd: "/donation/list",params }).then(res => {
+      setCountPage(res.totalPage)
+      setData(res.data)
+      console.log(res,'res')
+    })
+
+  }, [])
   async function loadMore() {
-    // const append = await mockRequest()
-    // setData(val => [...val, ...append])
-    setHasMore(data.length > 0)
+    let params = {
+      page:currentPage+1,
+      size:20,
+      type:1
+    }
+    setCurrentPage(currentPage=>currentPage+1)
+    axiosCustom({ cmd: "/donation/list",params }).then(res => {
+      setCountPage(res.totalPage)
+      setData([...data,...res.data])
+      console.log(res,'res')
+    })
   }
   function getNextData() {
     const ret = []
@@ -34,6 +58,19 @@ export default function AboutPage() {
     }
     return ret
   }
+  const checkStatus = (type) =>{
+    setCurrentPage(1)
+    setStatus(type)
+    let params = {
+      page:1,
+      size:20,
+      type
+    }
+    axiosCustom({ cmd: "/donation/list",params }).then(res => {
+      setCountPage(res.totalPage)
+      setData(res.data)
+    })
+  }
   return (
     <div className={styles.outBox}>
       <div className={styles.box}>
@@ -41,14 +78,13 @@ export default function AboutPage() {
         转赠记录
       </div>
       <div className={styles.switchBox}>
-        <div className={status == 1 ? styles.leftON : styles.leftOFF} onClick={() => setStatus(1)}>转出</div>
-        <div className={status == 1 ? styles.rightOFF : styles.rightON} onClick={() => setStatus(2)}>转入</div>
+        <div className={status == 1 ? styles.leftON : styles.leftOFF} onClick={() => checkStatus(1)}>转出</div>
+        <div className={status == 1 ? styles.rightOFF : styles.rightON} onClick={() => checkStatus(2)}>转入</div>
       </div>
       <PullToRefresh
         style={{ minHeight: '100%' }}
         onRefresh={async () => {
-          await sleep(1000)
-          setData([...getNextData(), ...data])
+          checkStatus(status)
         }}
       >
         
@@ -57,14 +93,14 @@ export default function AboutPage() {
             {data.map((item, index) => (
               <div key={index} className={styles.itembox} >
                 <div className={styles.leftBox}>
-                  <div>转赠至139****6426</div>
-                  <div>2023-08-11 15:25:00</div>
+                  <div>转赠至{status == 1?item.buy_login_name:item.sell_login_name}</div>
+                  <div>{item.create_time}</div>
                 </div>
-                <div className={styles.rightBox}>2650.00 DCP</div>
+                <div className={styles.rightBox}>{item.num} DCP</div>
               </div>
             ))}
           </div>
-          <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+          <InfiniteScroll loadMore={loadMore} hasMore={currentPage<countPage} threshold={10} />
         </div>
         </PullToRefresh>
     </div>

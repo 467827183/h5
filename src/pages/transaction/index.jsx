@@ -8,27 +8,53 @@ import sell from "../../assets/sell.png";
 import Header from '@/components/Header'
 import { useNavigate } from "react-router-dom";
 import close from "../../assets/icon_close.png";
-import { Form, Input, CenterPopup,Toast } from 'antd-mobile'
+import { Form, Input, CenterPopup,Toast,PasscodeInput } from 'antd-mobile'
 import { BrowserRouter as Router, Route, Link, useParams } from 'react-router-dom';
+import { axiosCustom, storage } from "@/Common";
 // import { lorem } from 'demos'
 export default function AboutPage() {
   const [submitValue, setSubmitValue] = useState('')
-  const { type } = useParams();
+  const { type,id } = useParams();
   const [visible, setVisible] = useState(false)
   const [status, setStatus] = useState(1)
   const [phone, setPhone] = useState('');
   const [codeSent, setCodeSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [info,setInfo] = useState({})
+  const [subVisible, setSubVisible] = useState(false)
+  const [inputValue,setInputValue] = useState('')
+  const [error, setError] = useState(false)
   const checkStatus = (type) => {
     setStatus(type)
   }
+  useEffect(()=>{
+    let params = {
+      id
+    }
+    axiosCustom({ cmd: "/market-separate/issue-order",params }).then(res => {
+      setInfo(res)
+      console.log(res, 'res++++')
+    })
+  },[])
   const navigate = useNavigate();
   const submitFunc = () => {
-    if (type == 1) {
-      navigate(-1);
-    } else {
-      setVisible(true)
+    if(!submitValue){
+      Toast.show('请输入数量')
+      return
     }
+    if(submitValue>info.dcp){
+      Toast.show(`数量不可超过可用`)
+      return
+    }
+    if(submitValue<info.min_num){
+      Toast.show(`数量不可小于${info.min_num}`)
+      return
+    }
+    if(submitValue>info.max_num){
+      Toast.show(`数量不可大于${info.max_num}`)
+      return
+    }
+      setSubVisible(true)
   }
   const beforeClose = () =>{
     setVisible(false)
@@ -75,9 +101,67 @@ export default function AboutPage() {
   const handleChangePhone = (e) => {
     setPhone(e);
   };
+  const modelClose2 = () => {
+    setInputValue('')
+    setSubVisible(false)
+  }
+  const setMax = () =>[
+    setSubmitValue(info.dcp)
+  ]
+  const onChange = (value) => {
+    setError(false)
+    setInputValue(value)
+  }
+  const modelCloseInput = () => {
+    if(inputValue.length<6){
+      setError(true)
+    } else{
+      let data = {
+        id,
+        num:submitValue,
+        pay_password:inputValue
+      }
+      axiosCustom({ cmd: "/market-separate/booking-order",method:'post',data }).then((res) => {
+        navigate(-1,{replace:true})
+        // commonFun()
+        // setSubmitValue('')
+        // setInputValue('')
+        // setTypeNumber({num1:'0.00',num2:'0.00'})
+        // setType2Number('0.00')
+        // Toast.show('闪兑成功！')
+        // setSubVisible(false)
+      })
+    }
+  }
   return (
     <div className={styles.outBox}>
-      <CenterPopup
+            <CenterPopup
+        visible={subVisible}
+        style={{'--z-index':'10000000'}}
+        onMaskClick={() => {
+          setSubVisible(false)
+        }}
+      >
+        <div className={styles.popBox} style={{ padding: '27px 20px 22px' }}>
+          <img src={close} className={styles.close} onClick={modelClose2}></img>
+          <div className={styles.title} style={{ marginBottom: '32px' }}>请输入支付密码</div>
+          {/* <div className={styles.info}>
+            <div>1. 7*24小时支持流通信用分与通证的闪兑</div>
+            <div>2. 流通信用分兑出手续费为5%;</div>
+            <div>3. 流通信用分兑出数量为10 - 10000:</div>
+            <div>4. 通证兑出数量为10 - 10000:</div>
+            <div>5. 流通信用分兑出分为5%的消费通证与95%的通证:</div>
+          </div> */}
+          <PasscodeInput seperated style={{ marginBottom: '32px' }}  onChange={onChange}
+          value={inputValue}
+            error={error} />
+          <div className={styles.know} onClick={modelCloseInput} style={{ width: '100%' }}>
+            确认
+          </div>
+        </div>
+        {/* <div className={styles.myContent}>Hello</div> */}
+      </CenterPopup>
+      {/* <CenterPopup
         visible={visible}
         onMaskClick={() => {
           setVisible(false)
@@ -99,8 +183,7 @@ export default function AboutPage() {
             确认
           </div>
         </div>
-        {/* <div className={styles.myContent}>Hello</div> */}
-      </CenterPopup>
+      </CenterPopup> */}
       <Header name={type == 1 ? '购买' : '出售'} />
       <div className={styles.header}>
         <img src={type == 1 ? buy : sell} className={styles.icon}></img>
@@ -108,18 +191,18 @@ export default function AboutPage() {
           <div className={styles.top}>{type == 1 ? '购买' : '出售'} DCP</div>
           <div className={styles.bottom}>
             <div>单价</div>
-            <div>￥0.95</div>
-            <div>00:42</div>
+            <div>￥{info.price}</div>
+            {/* <div>00:42</div> */}
           </div>
         </div>
       </div>
       <div className={styles.opera}>
         <div className={styles.switchBox}>
-          <div className={`${status == 2 && styles.noActive} ${styles.itemBox} `} onClick={() => checkStatus(1)}>
+          {/* <div className={`${status == 2 && styles.noActive} ${styles.itemBox} `} onClick={() => checkStatus(1)}>
             <div className={styles.name}>按金额</div>
             <div className={styles.line}></div>
-          </div>
-          <div className={`${status == 1 && styles.noActive} ${styles.itemBox} `} onClick={() => checkStatus(2)}>
+          </div> */}
+          <div className={` ${styles.itemBox} `}>
             <div className={styles.name}>按数量</div>
             <div className={styles.line}></div>
           </div>
@@ -130,7 +213,7 @@ export default function AboutPage() {
               <div className={styles.extraPart}>
                 <div>DCP</div>
                 <div></div>
-                <div>最大</div>
+                <div onClick={setMax}>最大</div>
               </div>
             }
           >
@@ -139,17 +222,17 @@ export default function AboutPage() {
         </Form>
         <div>
           <div className={styles.money}>
-            <div>限额</div><div>100-20000 CNY</div>
+            <div>限额</div><div>{info.min_num}-{info.max_num} CNY</div>
           </div>
           {
             type == 2 && (
               <div className={styles.money}>
-                <div>可出售</div><div>12,004.93 DCP</div>
+                <div>可出售</div><div>{info.dcp} DCP</div>
               </div>
             )
           }
           <div className={styles.overMoney}>
-            <div>{type == 1 ? '应付' : '出售'}</div><div>0.00 DCP</div>
+            <div>{type == 1 ? '应付' : '出售'}</div><div>{submitValue} DCP</div>
           </div>
         </div>
 
@@ -159,18 +242,26 @@ export default function AboutPage() {
           <div className={styles.payment}>
             <div className={styles.title}>支付方式</div>
             <div className={styles.payType}>
-              <div className={styles.items}>
-                <div className={styles.line}></div>
-                <div className={styles.name}>微信支付</div>
-              </div>
-              <div className={styles.items}>
+              {
+                info?.receipt?.includes('1')&&                            <div className={styles.items}>
                 <div className={styles.line} style={{ background: 'rgba(0, 160, 232, 1)' }}></div>
                 <div className={styles.name}>支付宝</div>
               </div>
-              <div className={styles.items}>
+              }
+              {
+                info?.receipt?.includes('2')&&              <div className={styles.items}>
+                <div className={styles.line}></div>
+                <div className={styles.name}>微信支付</div>
+              </div>
+              }
+                            {
+                info?.receipt?.includes('3')&&               <div className={styles.items}>
                 <div className={styles.line} style={{ background: "rgba(247, 181, 0, 1)" }}></div>
                 <div className={styles.name}>银行卡</div>
               </div>
+              }
+
+             
             </div>
           </div>
         )
@@ -178,20 +269,20 @@ export default function AboutPage() {
 
       <div className={styles.storeInfo}>
         <div className={styles.title}>商家信息</div>
-        <div className={styles.items}>
+        {/* <div className={styles.items}>
           <div>规定支付时长</div>
-          <div>30分钟</div>
-        </div>
+          <div>{info.tips}</div>
+        </div> */}
         <div className={styles.items}>
           <div>商家昵称</div>
-          <div>黄山商贸</div>
+          <div>{info.nick_name}</div>
         </div>
         <div className={styles.tips}>
           <div className={styles.title}>交易提醒</div>
-          <div className={styles.value}>
-            <div>必须使用本人实名账号转账。</div>
+          <div className={styles.value} dangerouslySetInnerHTML={{ __html: info?.mark }}>
+            {/* <div>必须使用本人实名账号转账。</div>
             <div>转账时请不要备注任何信息。</div>
-            <div>请不要设置延迟到账</div>
+            <div>请不要设置延迟到账</div> */}
           </div>
         </div>
       </div>

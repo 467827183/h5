@@ -11,27 +11,53 @@ import { Form, Input, CenterPopup,Toast } from 'antd-mobile'
 import { LeftOutline } from 'antd-mobile-icons'
 import { BrowserRouter as Router, Route, Link, useParams } from 'react-router-dom';
 import order from "../../assets/record.png";
+import { axiosCustom } from "@/Common";
 // import { lorem } from 'demos'
 export default function AboutPage() {
-  const [submitValue, setSubmitValue] = useState('')
   const { type } = useParams();
   const [visible, setVisible] = useState(false)
   const [status, setStatus] = useState(1)
+  const [dcpInfo,setDcpInfo] = useState({})
   const [account,setAccount] = useState('')
   const [password,setPassword] = useState('')
   const [phone, setPhone] = useState('');
   const [codeSent, setCodeSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [submitValue,setSubmitValue] = useState('')
   const checkStatus = (type) => {
     setStatus(type)
   }
+  useEffect(()=>{
+    axiosCustom({ cmd: "/donation/donation-conf" }).then(res => {
+      setDcpInfo(res)
+    })
+    
+  },[])
   const navigate = useNavigate();
   const submitFunc = () => {
-    if (type == 1) {
-      navigate(-1);
-    } else {
-      setVisible(true)
+    if(!account){
+      Toast.show('请输入转赠账户')
+      return
     }
+    if(!password){
+      Toast.show('请输入支付密码')
+      return
+    }
+    if(!submitValue){
+      Toast.show('请输入支付密码')
+      return
+    }
+    let data = {
+      type:2,
+      num:submitValue,
+      phone:account,
+      password
+    }
+    axiosCustom({ cmd: "/donation/donation",method:'post',data }).then(res => {
+      Toast.show('转赠成功')
+      // setDcpInfo(res)
+      console.log(res, 'res++++++')
+    })
   }
   const beforeClose = () =>{
     setVisible(false)
@@ -91,6 +117,9 @@ export default function AboutPage() {
   const gotoOrder = () =>{
     navigate('/transferRecord');
   }
+  const setMax = () =>{
+    setSubmitValue(dcpInfo?.dcp)
+  }
   return (
     <div className={styles.outBox}>
       <CenterPopup
@@ -131,7 +160,7 @@ export default function AboutPage() {
         <div>
           <div className={styles.top}>转赠DCP</div>
           <div className={styles.bottom}>
-            <div>转赠时间为00:00-24:00</div>
+            <div>{dcpInfo?.ps}</div>
           </div>
         </div>
       </div>
@@ -147,7 +176,7 @@ export default function AboutPage() {
               <div className={styles.extraPart}>
                 <div>DCP</div>
                 <div></div>
-                <div>最大</div>
+                <div onClick={setMax}>最大</div>
               </div>
             }
           >
@@ -155,7 +184,7 @@ export default function AboutPage() {
           </Form.Item>
         </Form>
         <div className={styles.money}>
-          <div>可用</div><div>100</div>
+          <div>可用</div><div>{dcpInfo?.dcp}</div>
         </div>
 
       </div>
@@ -163,7 +192,7 @@ export default function AboutPage() {
         <div className={styles.items}>
           <div>到账数量</div>
           <div className={styles.rightMoney}>
-            <div>0.00</div>
+            <div>{submitValue}</div>
             <div>DCP</div>
           </div>
         </div>

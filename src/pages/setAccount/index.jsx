@@ -4,13 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import tips_black from "../../assets/tips_black.png";
 import arrow_down from "../../assets/arrow_down.png";
-import { ImageUploader, Toast, Input, TextArea, Popup } from "antd-mobile";
+import { PasscodeInput , Toast, Input, CenterPopup, Popup } from "antd-mobile";
 // import { lorem } from 'demos'
 import check from "../../assets/check.png";
 import unCheck from "../../assets/unCheck.png";
 // 1:待付款 2：交易中
+import close from "../../assets/icon_close.png";
 const demoSrc =
   "https://images.unsplash.com/photo-1567945716310-4745a6b7844b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=60";
+  import { axiosCustom, storage } from "@/Common";
 export default function AboutPage() {
   const { type, status } = useParams();
   const [visible, setVisible] = useState(false)
@@ -23,18 +25,48 @@ export default function AboutPage() {
     { name: '支付宝', status: false, line: 'rgba(0, 160, 232, 1)', type: 2 },
     { name: '微信支付', status: false, line: 'rgba(46, 175, 100, 1)', type: 3 },
   ])
+  const [subVisible, setSubVisible] = useState(false)
+  const [bank,setBank] = useState('')
   const [current, setCurrent] = useState(selectItem[0])
+  const [error, setError] = useState(false)
+  const navigate = useNavigate();
   function mockUpload(file) {
     return {
       url: URL.createObjectURL(file),
     };
   }
+  useEffect(()=>{
+
+    if(type != 1){
+      axiosCustom({ cmd: "/receipt/receipt" }).then(res => {
+        //支付宝
+        if(type == 3){
+          setCurrent(selectItem[2])
+          setText(res.wechat.true_name)
+          setNumber(res.wechat.account)
+          console.log(current, 'current')
+        } else if (type == 4){
+          setCurrent(selectItem[0])
+          setText(res.bank.bank_holder)
+          setNumber(res.bank.card_no)
+          setBank(res.bank.bank_name)
+        } else {
+          setText(res.alipay.true_name)
+          setNumber(res.alipay.account)
+        }
+    })  
+    }
+  },[])
   const getCurrentItem = () => {
     const newArr = [...selectItem]
     let result = newArr.filter(item => {
       return item.status
     })
     return result[0]
+  }
+  const onChange = (value) => {
+    setError(false)
+    setInputValue(value)
   }
   const beforeUp = (file, files) => {
     const allowedTypes = ["image/png", "image/jpg", "image/pdf"];
@@ -54,7 +86,6 @@ export default function AboutPage() {
     let result = newArr.filter(item => {
       return item.status
     })
-    setInputValue(result[0].name)
     setCurrent(result[0])
     setVisible(false);
 
@@ -74,12 +105,18 @@ export default function AboutPage() {
     })
     newArr[index].status = true
     setSelectItem(newArr)
+    setText('')
+    setNumber('')
+    setBank('')
   }
   const TextAreafun = (e) => {
     setText(e);
   };
   const numberfun = (e) => {
     setNumber(e);
+  };
+  const bankfun = (e) => {
+    setBank(e);
   };
   const name = () => {
 
@@ -90,9 +127,87 @@ export default function AboutPage() {
     }
     return params[current.type]
   }
+  const oversubmit = () =>{
+    if(!text){
+      return Toast.show('请输入姓名')
+    }
+    if(!number){
+      return Toast.show('请输入账号')
+    }
+    if(current.type == 1 &&!bank){
+      return Toast.show('请输开户银行')
+    }
+    setSubVisible(true)
+  }
+  const modelClose2 = () => {
+    setInputValue('')
+    setSubVisible(false)
+  }
+  const modelCloseInput = () => {
+    if(inputValue.length<6){
+      setError(true)
+    } else{
+      let data = {
+        account:number,
+        name:text,
+        password:inputValue
+      }
+      if(current.type == 2){
+        axiosCustom({ cmd: "/receipt/alipay",method:'post',data }).then(res => {
+          Toast.show(`${type == 1?'添加':'修改'}成功`)
+          navigate('/account',{replace:true})
+        })  
+      }
+      if(current.type== 3){
+        axiosCustom({ cmd: "/receipt/wechat",method:'post',data }).then(res => {
+          Toast.show(`${type == 1?'添加':'修改'}成功`)
+          navigate('/account',{replace:true})
+        })  
+      }
+      if(current.type == 1){
+        let newData = {
+          card_no:number,
+          bank_name:bank,
+          bank_holder:text,
+          password:inputValue
+        }
+        axiosCustom({ cmd: "/receipt/bank",method:'post',data:newData }).then(res => {
+          Toast.show(`${type == 1?'添加':'修改'}成功`)
+          navigate('/account',{replace:true})
+        })  
+      }
+
+    }
+  }
   // const navigate = useNavigate();
   return (
     <div className={styles.outBox}>
+      <CenterPopup
+        visible={subVisible}
+        style={{'--z-index':'10000000'}}
+        onMaskClick={() => {
+          setSubVisible(false)
+        }}
+      >
+        <div className={styles.popBox} style={{ padding: '27px 20px 22px' }}>
+          <img src={close} className={styles.close} onClick={modelClose2}></img>
+          <div className={styles.title} style={{ marginBottom: '32px' }}>请输入支付密码</div>
+          {/* <div className={styles.info}>
+            <div>1. 7*24小时支持流通信用分与通证的闪兑</div>
+            <div>2. 流通信用分兑出手续费为5%;</div>
+            <div>3. 流通信用分兑出数量为10 - 10000:</div>
+            <div>4. 通证兑出数量为10 - 10000:</div>
+            <div>5. 流通信用分兑出分为5%的消费通证与95%的通证:</div>
+          </div> */}
+          <PasscodeInput seperated style={{ marginBottom: '32px' }}  onChange={onChange}
+          value={inputValue}
+            error={error} />
+          <div className={styles.know} onClick={modelCloseInput} style={{ width: '100%' }}>
+            确认
+          </div>
+        </div>
+        {/* <div className={styles.myContent}>Hello</div> */}
+      </CenterPopup>
       <Popup
         visible={visible}
         onMaskClick={() => {
@@ -171,32 +286,33 @@ export default function AboutPage() {
           />
         </div>
         {
-          current.type == 1 ? <div>
+          current.type == 1 && <div>
             <div className={styles.title}>开户银行<span style={{color:'red'}}>*</span></div>
             <div className={styles.inputBox}>
               <Input
-                value={number}
-                type="number"
-                placeholder={`请输入${name()}`}
-                onChange={numberfun}
+                value={bank}
+                placeholder={`请输入开户银行`}
+                onChange={bankfun}
               />
             </div>
-          </div> : <div>
-            <div className={styles.title}>二维码</div>
-            <ImageUploader
-              style={{ "--cell-size": "115px", marginBottom: "15px" }}
-              value={fileList}
-              onChange={setFileList}
-              upload={mockUpload}
-              beforeUpload={beforeUp}
-              multiple
-              maxCount={1}
-              showUpload={fileList.length < 2}
-            />
-          </div>
+          </div> 
         }
-        <div className={styles.btns}>完成添加</div>
+
+        <div className={styles.btns} onClick={oversubmit}>完成{type == 1?'添加':'修改'}</div>
       </div>
     </div>
   );
 }
+        // <div>
+        //     <div className={styles.title}>二维码</div>
+        //     <ImageUploader
+        //       style={{ "--cell-size": "115px", marginBottom: "15px" }}
+        //       value={fileList}
+        //       onChange={setFileList}
+        //       upload={mockUpload}
+        //       beforeUpload={beforeUp}
+        //       multiple
+        //       maxCount={1}
+        //       showUpload={fileList.length < 2}
+        //     />
+        //   </div>

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import unCheck from "../../assets/unCheck.png";
 import order from "../../assets/order.png";
 // import { lorem } from 'demos'
+import { axiosCustom, storage } from "@/Common";
 export default function AboutPage() {
   const [active, setActive] = useState(2)
   const [visible, setVisible] = useState(false)
@@ -19,8 +20,25 @@ export default function AboutPage() {
     {name:'微信支付',status:false,line:'rgba(46, 175, 100, 1)',type:4},
   ])
   const [hasMore, setHasMore] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [countPage,setCountPage] = useState(1)
   const navigate = useNavigate();
-  const [data, setData] = useState(() => getNextData())
+  const [data, setData] = useState([])
+  useEffect(()=>{
+
+  },[])
+  const originRequest = () =>{
+    let params =
+    {
+      page:1,
+      size:10,
+      type:2
+    }
+    axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
+      setCountPage(res.totalPage)
+      setData(res.data)
+    })
+  }
   const itemClick = (index )=>{
     const newArr = [...selectItem]
     if(index != 0){
@@ -48,6 +66,32 @@ export default function AboutPage() {
     // setData(val => [...val, ...append])
     setHasMore(data.length > 0)
   }
+  async function loadMore() {
+    let params = {
+      page:currentPage+1,
+      size:20,
+      type:1
+    }
+    setCurrentPage(currentPage=>currentPage+1)
+    axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
+      setCountPage(res.totalPage)
+      setData([...data,...res.data])
+    })
+  }
+  const checkStatus = (type) =>{
+    setData([])
+    setCurrentPage(1)
+    setActive(type)
+    let params = {
+      page:1,
+      size:20,
+      type
+    }
+    axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
+      setCountPage(res.totalPage)
+      setData(res.data)
+    })
+  }
   function getNextData() {
     const ret= []
     for (let i = 0; i < 18; i++) {
@@ -56,7 +100,13 @@ export default function AboutPage() {
     return ret
   }
   const gotoOrder = () =>{
-    navigate(`/order/${active}`);
+    let type = 1
+    if(active == 1){
+      type = 2
+    } else{
+      type = 1
+    }
+    navigate(`/order/${type}`);
   }
   const reset = () =>{
     const newArr = [...selectItem]
@@ -69,8 +119,18 @@ export default function AboutPage() {
   const submit = () =>{
     setVisible(false)
   }
-  const gotoDetail =(active) =>{
-    navigate(`/transaction/${active}`);
+  const gotoDetail =(active,id) =>{
+    let type = 1
+    if(active == 1){
+      type = 2
+    } else{
+      type = 1
+    }
+    navigate(`/transaction/${type}/${id}`);
+  }
+  const getNumber = (item) =>{
+    const result = item.surplus / item.num;
+    return result.toFixed(2)*100; // 保留两位小数并返回字符串
   }
   return (
     <div className={styles.outBox}>
@@ -80,13 +140,13 @@ export default function AboutPage() {
       </div>
       <div className={styles.header}>
         <div className={styles.switchBox}>
-          <div className={active == 1 ? styles.active : styles.noActive} onClick={() => setActive(1)}>购买</div>
-          <div className={active == 2 ? styles.active : styles.noActive} onClick={() => setActive(2)}>出售</div>
+          <div className={active == 2 ? styles.active : styles.noActive} onClick={() => checkStatus(2)}>购买</div>
+          <div className={active == 1 ? styles.active : styles.noActive} onClick={() => checkStatus(1)}>出售</div>
         </div>
-        <div className={styles.right_select} onClick={()=>{setVisible(true)}}>
+        {/* <div className={styles.right_select} onClick={()=>{setVisible(true)}}>
           <div>支付方式</div>
           <img src={dropDown}></img>
-        </div>
+        </div> */}
       </div>
       <Popup
         visible={visible}
@@ -134,44 +194,66 @@ export default function AboutPage() {
       <PullToRefresh
         style={{minHeight:'100%'}}
         onRefresh={async () => {
-          await sleep(1000)
-          setData([...getNextData(), ...data])
+          originRequest()
         }}
       >
         <List style={{ flex:1 }}>
           {data.map((item, index) => (
             <List.Item key={index} className={styles.itembox}>
               <div className={styles.comheader}>
-                <div className={styles.btm}>鸿</div>
-                鸿运集团
+                <img className={styles.btm} src={item.user_face}></img>
+                {item.nick_name}
               </div>
               <div className={styles.comNumber}>
-                <div>成交量 476</div>
+                <div>成交量 {item.num - item.surplus}</div>
                 <div className={styles.point}></div>
-                <div>99.37%成交率</div>
+                <div>{getNumber(item)}%成交率</div>
               </div>
-              <div className={styles.number}><span className={styles.unit}>￥</span>1.00</div>
+              <div className={styles.number}><span className={styles.unit}>￥</span>{item.price}</div>
               <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'9px'}}>
                 <div>
                   <div className={styles.numberItem} style={{marginBottom:'4px'}}>
                     <div>数量</div>
-                    <div>12,004.93 DCP</div>
+                    <div>{item.surplus} DCP</div>
                   </div>
                   <div className={styles.numberItem}>
                     <div>限额</div>
-                    <div>100-20000 CNY</div>
+                    <div>{item.min_num}-{item.max_num} CNY</div>
                   </div>
                 </div>
-                <div className={styles.button} style={{background:active==1?'#2DBF64':"rgba(235, 75, 110, 1)"}} onClick={()=>gotoDetail(active)}>{active == 1?'购买':'出售'}</div>
+                <div className={styles.button} style={{background:active==2?'#2DBF64':"rgba(235, 75, 110, 1)"}} onClick={()=>gotoDetail(active,item.id)}>{active == 2?'购买':'出售'}</div>
               </div>
-              <div className={styles.typeBox}>
-                <div className={styles.line}></div>
-                <div className={styles.name}>微信支付</div>
+              <div style={{display:'flex'}}>
+              {
+                  item?.receipt?.includes('1')&&(
+                    <div className={styles.typeBox}>
+                    <div className={styles.line} style={{backgroundColor:'rgba(0, 160, 232, 1)'}}></div>
+                    <div className={styles.name}>支付宝</div>
+                  </div>
+                  )
+                }
+                {
+                  item?.receipt?.includes('2')&&(
+                    <div className={styles.typeBox}>
+                    <div className={styles.line}></div>
+                    <div className={styles.name}>微信支付</div>
+                  </div>
+                  )
+                }
+                {
+                  item?.receipt?.includes('3')&&(
+                    <div className={styles.typeBox}>
+                    <div className={styles.line} style={{backgroundColor:'rgba(247, 181, 0, 1)'}}></div>
+                    <div className={styles.name}>银行卡</div>
+                  </div>
+                  )
+                }
+
               </div>
             </List.Item>
           ))}
         </List>
-        <InfiniteScroll loadMore={loadMore} hasMore={hasMore} />
+        <InfiniteScroll loadMore={loadMore} hasMore={currentPage<countPage} threshold={10} />
       </PullToRefresh>
       </div>
     </div>

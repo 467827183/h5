@@ -2,6 +2,25 @@
   width: 100%;
   height: 100%;
   position: relative;
+  :global {
+    .adm-form-item-child {
+      height: 37px;
+    }
+
+    .adm-list-item-content-main {
+      padding: 8px 0;
+    }
+    .adm-center-popup-wrap{
+      width: 85%;
+      max-width: 85%;
+    }
+    .adm-passcode-input-cell-dot{
+      border-color: black !important;
+    }
+    .adm-passcode-input.adm-passcode-input-seperated.adm-passcode-input-error .adm-passcode-input-cell{
+      border-color:red !important
+    }
+  }
 }
 .contentBox {
   padding: 0 15px 62px;
@@ -22,12 +41,13 @@
   border: 1px solid #E8E8EB;
   padding: 12px 15px;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
   img{
     position: absolute;
     width: 12px;
     height: 8px;
     right: 17px;
-    top: 22px;
   }
 }
 :global {
@@ -144,4 +164,56 @@ margin-left: 5px;
   font-style: normal;
   margin-top: 11px;
   margin-bottom: 22px;
+}
+.popBox{
+  padding: 27px 31px 22px;
+  position: relative;
+  .title{
+    width: 100%;
+    height: 22px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+    line-height: 22px;
+    text-align: center;
+    font-style: normal;
+    margin-bottom: 21px;
+  }
+  .close{
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    right: 11px;
+    top: 11px;
+  }
+  .info{
+    width: 100%;
+    height: 160px;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 400;
+    font-size: 14px;
+    color: #333333;
+    line-height: 20px;
+    text-align: left;
+    font-style: normal;
+    margin-bottom: 14px;
+    div{
+      margin-bottom: 10px;
+    }
+  }
+  .know{
+    width: 150px;
+    height: 45px;
+    background: #000000;
+    border-radius: 23px;
+    margin: 0 auto;
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 500;
+    font-size: 14px;
+    color: #FFFFFF;
+    line-height: 45px;
+    text-align: center;
+    font-style: normal;
+  }
 }
