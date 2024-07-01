@@ -40,7 +40,7 @@ export default function Layout() {
     setIsInit(true);
   }, [location.pathname]);
   useEffect(()=>{
-    if(location.pathname == '/login'){
+    if(location.pathname == '/login'||location.pathname == '/'){
       return
     }
     axiosCustom({ cmd: "/user/info" }).then(res => {
