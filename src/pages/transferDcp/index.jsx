@@ -44,7 +44,7 @@ export default function AboutPage() {
       return
     }
     if(!submitValue){
-      Toast.show('请输入支付密码')
+      Toast.show('请输入数额')
       return
     }
     let data = {

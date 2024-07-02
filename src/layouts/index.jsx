@@ -53,10 +53,16 @@ export default function Layout() {
 
   const setRouteActive = (value) => {
     if(value == '/flow'){
+      if(userInfo.pay_password){
         navigate(value);
+      } else {
+        Toast.show('请设置支付密码')
+      }
     } else {
       navigate(value);
     }
+    // if(value)
+    console.log(value,userInfo.pay_password)
     
   };
   const imgItem = (name)=>{
