@@ -33,15 +33,21 @@ export default function AboutPage() {
     let params =
     {
       page:1,
-      size:10,
+      size:20,
       type,
     }
     if(status != 6){
       params.status = status
     }
     axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
-      setData(res.data)
-      console.log(res, 'res++++')
+      if(status == 6){
+        let result = res.data.filter(item=>{
+          return item.status!=1&&item.status!=2
+        })
+        setData(result)
+      } else {
+        setData(res.data)
+      }
     })
   }
   async function loadMore() {
