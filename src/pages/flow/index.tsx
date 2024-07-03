@@ -65,6 +65,7 @@ export default function HomePage() {
       })
     } else if(currentItem.type == 2){
       const rate = userInfo.flow_to_dcp.rate
+      console.log(e,rate, '12313123')
       setType2Number(e/rate)
     }
     setSubmitValue(e)
@@ -280,14 +281,14 @@ const setAll = () =>{
           currentItem.type == 1 && (
             <div className={styles.type1Info}>
               <div className={styles.typeItem}>
-                <div>{truncateDecimals(typeNumber.num1)}</div>
+                <div>{truncateDecimals(typeNumber.num2)}</div>
                 <div>通证DCP(95%)</div>
               </div>
               <div className={styles.line}>
 
               </div>
               <div className={styles.typeItem}>
-                <div>{truncateDecimals(typeNumber.num2)}</div>
+                <div>{truncateDecimals(typeNumber.num1)}</div>
                 <div>消费通证(5%) </div>
               </div>
             </div>

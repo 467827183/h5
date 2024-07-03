@@ -257,10 +257,6 @@ export default function AboutPage() {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{ backgroundColor: current?.line }} className={styles.line}></div>
             <div className={styles.name} style={{ fontWeight: 400 }}>{current?.name}</div>
-            {
-              current && current.type != 1 && <div className={styles.specialTitle}>及时支付</div>
-            }
-
           </div>
           {/* <Input placeholder="选择收款方式" value={inputValue} readOnly /> */}
           <img src={arrow_down}></img>

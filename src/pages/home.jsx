@@ -70,7 +70,7 @@ const Home = () => {
           return(
             <div key={index} className={styles.newsItme} onClick={()=>goto(item.id)}>
               <div className={styles.titles}>{item.title}</div>
-              <div className={styles.time}>{item.time}</div>
+              <div className={styles.create_time}>{item.create_time}</div>
             </div>
           )
         })

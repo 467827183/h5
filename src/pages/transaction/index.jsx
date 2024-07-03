@@ -42,7 +42,7 @@ export default function AboutPage() {
       Toast.show('请输入数量')
       return
     }
-    if(submitValue>info.dcp){
+    if(Number(submitValue)>Number(info.dcp)){
       Toast.show(`数量不可超过可用`)
       return
     }
