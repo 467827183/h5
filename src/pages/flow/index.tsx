@@ -129,20 +129,37 @@ export default function HomePage() {
     if(inputValue.length<6){
       setError(true)
     } else{
-      let data = {
-        num:submitValue,
-        type:currentItem.type,
-        password:inputValue
+      if(currentItem.type == 3){
+        let data = {
+          num:submitValue,
+          password:inputValue
+        }
+        axiosCustom({ cmd: "/user/score-out",method:'post',data }).then((res:any) => {
+          commonFun()
+          setSubmitValue('')
+          setInputValue('')
+          setTypeNumber({num1:'0.00',num2:'0.00'})
+          setType2Number('0.00')
+          Toast.show('转入成功！')
+          setSubVisible(false)
+        })
+      } else {
+        let data = {
+          num:submitValue,
+          type:currentItem.type,
+          password:inputValue
+        }
+        axiosCustom({ cmd: "/market/exchange",method:'post',data }).then((res:any) => {
+          commonFun()
+          setSubmitValue('')
+          setInputValue('')
+          setTypeNumber({num1:'0.00',num2:'0.00'})
+          setType2Number('0.00')
+          Toast.show('闪兑成功！')
+          setSubVisible(false)
+        })
       }
-      axiosCustom({ cmd: "/market/exchange",method:'post',data }).then((res:any) => {
-        commonFun()
-        setSubmitValue('')
-        setInputValue('')
-        setTypeNumber({num1:'0.00',num2:'0.00'})
-        setType2Number('0.00')
-        Toast.show('闪兑成功！')
-        setSubVisible(false)
-      })
+
     }
   }
   
