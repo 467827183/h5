@@ -144,9 +144,9 @@ export default function AboutPage() {
     if (value4 > value1) {
       return Toast.show('最小限额应小于数量')
     }
-    if (value5 > value1) {
-      return Toast.show('最大限额应小于数量')
-    }
+    // if (value5 > value1) {
+    //   return Toast.show('最大限额应小于数量')
+    // }
     let data = {
       num: value1,
       receipt_type: arr.toString(','),
@@ -158,6 +158,7 @@ export default function AboutPage() {
     axiosCustom({
       cmd: "/market-separate/issue-order", method: "post", data,
     }).then(res => {
+      Toast.show('发布成功，等待匹配中...')
       commonRequest(statusBottom)
     })
   }

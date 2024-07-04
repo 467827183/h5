@@ -276,7 +276,6 @@ export default function AboutPage() {
         <div className={styles.inputBox}>
           <Input
             value={number}
-            type="number"
             placeholder={`请输入${name()}`}
             onChange={numberfun}
           />
