@@ -39,21 +39,15 @@ export default function Layout() {
     setDefaultOpenKeys(pathArr);
     setIsInit(true);
   }, [location.pathname]);
-  useEffect(()=>{
-    if(location.pathname == '/login'||location.pathname == '/'){
-      return
-    }
-    axiosCustom({ cmd: "/user/info" }).then(res => {
-      setUserInfo(res.user)
-    })
-  },[])
+
   if (!isInit) {
     return null;
   }
 
   const setRouteActive = (value) => {
+    const values = storage.get('user')
     if(value == '/flow'){
-      if(userInfo.pay_password){
+      if(values?.pay_password){
         navigate(value);
       } else {
         Toast.show('请设置支付密码')
@@ -61,9 +55,6 @@ export default function Layout() {
     } else {
       navigate(value);
     }
-    // if(value)
-    console.log(value,userInfo.pay_password)
-    
   };
   const imgItem = (name)=>{
     return <img src={name} style={{width:'100%',height:'100%'}}/>

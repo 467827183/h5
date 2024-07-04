@@ -119,6 +119,10 @@ export default function LoginPage() {
       Toast.show('登录成功')
       navigate('/home')
     }
+    axiosCustom({ cmd: "/user/info" }).then(res => {
+      console.log(res, 'res+++++')
+      storage.set('user',res.user)
+    })
   }
   const submit = () => {
     setVisible(false);

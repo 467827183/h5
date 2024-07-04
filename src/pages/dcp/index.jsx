@@ -185,6 +185,14 @@ export default function AboutPage() {
       commonRequest(statusBottom)
     })
   }
+  const beforeCheck = (type) =>{
+    if(type == 1){
+      setValue2(priceInfo.buy_price)
+    } else {
+      setValue2(priceInfo.sell_price)
+    }
+    setStatus(type)
+  }
   return (
 
     <div className={styles.outBox}>
@@ -214,8 +222,8 @@ export default function AboutPage() {
           <div className={styles.btn} onClick={() => gotoTransfer()}> 转赠DCP</div>
         </div>
         <div className={styles.switchBox}>
-          <div className={status == 1 ? styles.leftON : styles.leftOFF} onClick={() => setStatus(1)}>收购</div>
-          <div className={status == 1 ? styles.rightOFF : styles.rightON} onClick={() => setStatus(2)}>出售</div>
+          <div className={status == 1 ? styles.leftON : styles.leftOFF} onClick={() => beforeCheck(1)}>收购</div>
+          <div className={status == 1 ? styles.rightOFF : styles.rightON} onClick={() => beforeCheck(2)}>出售</div>
         </div>
         <div className={styles.inputBox}>
           <div className={styles.title}>数量</div>
