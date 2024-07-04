@@ -33,12 +33,12 @@ export default function AboutPage() {
     let params =
     {
       page:1,
-      size:20,
+      size:1000,
       type,
     }
-    if(status != 6){
-      params.status = status
-    }
+    // if(status != 6){
+    //   params.status = '1,2'
+    // }
     axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
       if(status == 6){
         let result = res.data.filter(item=>{
@@ -46,7 +46,11 @@ export default function AboutPage() {
         })
         setData(result)
       } else {
-        setData(res.data)
+        let result = res.data.filter(item=>{
+          return item.status==1||item.status==2
+        })
+        setData(result)
+        // setData(res.data)
       }
     })
   }
