@@ -36,21 +36,21 @@ export default function AboutPage() {
     };
   }
   useEffect(()=>{
-
     if(type != 1){
       axiosCustom({ cmd: "/receipt/receipt" }).then(res => {
         //支付宝
-        if(type == 3){
+        if(type == 5){
           setCurrent(selectItem[2])
           setText(res.wechat.true_name)
           setNumber(res.wechat.account)
           console.log(current, 'current')
-        } else if (type == 4){
+        } else if (type == 6){
           setCurrent(selectItem[0])
           setText(res.bank.bank_holder)
           setNumber(res.bank.card_no)
           setBank(res.bank.bank_name)
         } else {
+          setCurrent(selectItem[1])
           setText(res.alipay.true_name)
           setNumber(res.alipay.account)
         }

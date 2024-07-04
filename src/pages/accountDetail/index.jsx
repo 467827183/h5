@@ -50,7 +50,8 @@ export default function AboutPage() {
     document.body.removeChild(copyInput);
   };
   const gotoEdit = () => {
-    navigate(`/setAccount/${Number(type)+1}`);
+    
+    navigate(`/setAccount/${Number(type)+3}`);
   }
   function formatBankCardNumber(cardNumber) {
     // 去除除了数字以外的所有字符
@@ -72,6 +73,7 @@ export default function AboutPage() {
     return formatted;
 }
 const deleteAccount = () =>{
+  console.log(type, 'type')
   if(type == 1){
     axiosCustom({ cmd: "/receipt/wechat",method:'delete' }).then(res => {
       Toast.show('删除成功')

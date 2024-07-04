@@ -106,7 +106,10 @@ export default function AboutPage() {
     axiosCustom({ cmd: "/account/out" }).then(res => {
       storage.clear()
       navigate('/');
-    })  
+    }).catch(res=>{
+      storage.clear()
+      navigate('/');
+    })
   }
 
   // const navigate = useNavigate();

@@ -150,13 +150,13 @@ export default function AboutPage() {
                   <img src={arrow_right_1} style={{ width: '14px', height: '14px' }}></img>
                 </div>
                 <div className={styles.payDetail}>
-                  <div>张三</div>
+                  <div>{info.alipay.true_name}</div>
                   <div className={styles.line}></div>
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    Zsy908
+                    {info.alipay.account}
                   </div>
                   {/* <div className={styles.line}></div>
-                  <img src={qrCode} style={{ width: '14px', height: '14px' }}></img> */}
+                  <img src={qrCode} style={{ width: '14px', height: 's14px' }}></img> */}
                 </div>
               </div>
               )
