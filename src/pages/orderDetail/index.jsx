@@ -26,6 +26,7 @@ export default function AboutPage() {
     };
   }
   useEffect(()=>{
+    console.log(id, 'id+++++')
     let params = {
       id
     }

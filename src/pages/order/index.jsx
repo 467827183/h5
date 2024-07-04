@@ -96,6 +96,7 @@ export default function AboutPage() {
     if(item.status!=1&&item.status!=2){
       return
     }
+    console.log(item.id, 'item++++')
     navigate(`/orderDetail/${type}/${item.id}`);
   }
   return (
