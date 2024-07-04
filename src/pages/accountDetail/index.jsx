@@ -50,7 +50,6 @@ export default function AboutPage() {
     document.body.removeChild(copyInput);
   };
   const gotoEdit = () => {
-    
     navigate(`/setAccount/${Number(type)+3}`);
   }
   function formatBankCardNumber(cardNumber) {
@@ -74,12 +73,12 @@ export default function AboutPage() {
 }
 const deleteAccount = () =>{
   console.log(type, 'type')
-  if(type == 1){
+  if(type == 2){
     axiosCustom({ cmd: "/receipt/wechat",method:'delete' }).then(res => {
       Toast.show('删除成功')
       navigate(-1,{replace:true})
     }) 
-  } else if(type == 2){
+  } else if(type == 1){
     axiosCustom({ cmd: "/receipt/alipay",method:'delete' }).then(res => {
       Toast.show('删除成功')
       navigate(-1,{replace:true})

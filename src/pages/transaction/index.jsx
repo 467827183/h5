@@ -105,9 +105,13 @@ export default function AboutPage() {
     setInputValue('')
     setSubVisible(false)
   }
-  const setMax = () =>[
-    setSubmitValue(info.dcp)
-  ]
+  const setMax = () =>{
+    if(type == 1){
+      setSubmitValue(info.max_num)
+    } else {
+      setSubmitValue(info.dcp)
+    }
+  }
   const onChange = (value) => {
     setError(false)
     setInputValue(value)
