@@ -19,6 +19,8 @@ export default function AboutPage() {
     { name: '支付宝', status: false, line: 'rgba(0, 160, 232, 1)', type: 3 },
     { name: '微信支付', status: false, line: 'rgba(46, 175, 100, 1)', type: 4 },
   ])
+  const [currentType,setCurrentType] = useState(type)
+  const [active, setActive] = useState(2)
   const [currentPage, setCurrentPage] = useState(1)
   const [countPage,setCountPage] = useState(1)
   const [status, setStatus] = useState(1)
@@ -27,18 +29,46 @@ export default function AboutPage() {
   const [data, setData] = useState([])
 
   useEffect(()=>{
-    commonRequests(type)
+    commonRequests(currentType)
+    let value = 1
+    if(type == 2){
+      value = 1
+    } else{
+      value = 2
+    }
+    setActive(value)
   },[])
-  const commonRequests = (status) =>{
+  const commonRequests = (status,type) =>{
     let params =
     {
       page:1,
       size:1000,
       type,
     }
-    // if(status != 6){
-    //   params.status = '1,2'
-    // }
+
+    axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
+      if(status == 6){
+        let result = res.data.filter(item=>{
+          return item.status!=1&&item.status!=2
+        })
+        setData(result)
+      } else {
+        let result = res.data.filter(item=>{
+          return item.status==1||item.status==2
+        })
+        setData(result)
+        // setData(res.data)
+      }
+    })
+  }
+  const commonCheckRequests = (type) =>{
+    let params =
+    {
+      page:1,
+      size:1000,
+      type,
+    }
+
     axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
       if(status == 6){
         let result = res.data.filter(item=>{
@@ -58,7 +88,7 @@ export default function AboutPage() {
     let params = {
       page:currentPage+1,
       size:20,
-      type:1,
+      type:curentType,
       status
     }
     setCurrentPage(currentPage=>currentPage+1)
@@ -75,10 +105,10 @@ export default function AboutPage() {
     return ret
   }
 
-  const checkStatus = (type) => {
-    setData([])
-      commonRequests(type)
-      setStatus(type)
+  const checkStatus = (status) => {
+      setData([])
+      commonRequests(status,currentType)
+      setStatus(status,currentType)
   }
   const reset = () => {
     const newArr = [...selectItem]
@@ -96,13 +126,30 @@ export default function AboutPage() {
     if(item.status!=1&&item.status!=2){
       return
     }
-    console.log(item.id, 'item++++')
-    navigate(`/orderDetail/${type}/${item.id}`);
+    navigate(`/orderDetail/${currentType}/${item.id}`);
+  }
+  const checKType = (type) =>{
+    setActive(type)
+    setData([])
+    let value = 1
+    if(type == 2){
+      value = 1
+    } else{
+      value = 2
+    }
+    setCurrentType(value)
+    commonCheckRequests(value)
   }
   return (
     <div className={styles.outBox}>
       <div style={{padding:'0 14px' }}>
         <Header name={'订单'}  />
+      </div>
+      <div className={styles.headers}>
+        <div className={styles.switchBoxs}>
+          <div className={active == 2 ? styles.active : styles.noActive} onClick={() => checKType(2)}>购买</div>
+          <div className={active == 1 ? styles.active : styles.noActive} onClick={() => checKType(1)}>出售</div>
+        </div>
       </div>
       <div className={styles.header}>
         <div className={styles.switchBox}>
@@ -127,14 +174,14 @@ export default function AboutPage() {
         <PullToRefresh
           style={{ minHeight: '100%' }}
           onRefresh={async () => {
-            commonRequests(type)
+            commonRequests(currentType)
           }}
         >
           <List style={{ flex: 1 }}>
             {data.map((item, index) => (
               <List.Item key={index} className={styles.itembox} arrow={false} onClick={()=>gotoDetail(item)}>
                 <div className={styles.comheader}>
-                  <div><span style={{ color: type == 1 ? 'rgba(45, 191, 100, 1)' : 'rgba(235, 75, 110, 1)' }}>{type == 1 ? '购买' : '出售'}</span>DCP</div>
+                  <div><span style={{ color: currentType == 1 ? 'rgba(45, 191, 100, 1)' : 'rgba(235, 75, 110, 1)' }}>{currentType == 1 ? '购买' : '出售'}</span>DCP</div>
                   <div className={styles.rightBtn}>{item.status_name}           
                     <img src={arrow_right} style={{ width: '13px', height: '13px', marginLeft: '7px' }}></img>
                     </div>

@@ -28,9 +28,9 @@ const Home = () => {
       <img
         className={styles.swiperItem}
         src={item.image}
-        onClick={() => {
-          Toast.show(`你点击了卡片 ${index + 1}`);
-        }}
+        // onClick={() => {
+        //   Toast.show(`你点击了卡片 ${index + 1}`);
+        // }}
       >
         {/* {index + 1} */}
       </img>
@@ -49,6 +49,8 @@ const Home = () => {
       </div>
       <div className={styles.swiperBox}>
         <Swiper
+          autoplay
+          loop
           indicator={(total, current) => (
             <div className={styles.customIndicator}>
               {current + 1} / <span>{total}</span>
