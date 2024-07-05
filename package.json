@@ -3,7 +3,9 @@
   "author": "Lakshya",
   "scripts": {
     "build": "umi build",
-    "dev": "umi dev",
+    "dev": "cross-env UMI_ENV=testbuild umi dev",
+    "build:dev": "cross-env UMI_ENV=testbuild umi build",
+    "build:prod": "cross-env UMI_ENV=probuild umi build",
     "postinstall": "umi setup",
     "setup": "umi setup",
     "start": "npm run dev",

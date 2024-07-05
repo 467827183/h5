@@ -3,7 +3,7 @@ import { Toast } from "antd-mobile";
 import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
 export function axiosCustom({
-  api = "https://test-api.tideswap.io/v1",
+  api = process.env.SUBG_API,
   cmd = "",
   headers = {
     "Content-Type": "application/json",
