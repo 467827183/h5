@@ -29,7 +29,7 @@ export default function AboutPage() {
   const [data, setData] = useState([])
 
   useEffect(()=>{
-    commonRequests(currentType)
+    commonRequests(1,currentType)
     let value = 1
     if(type == 2){
       value = 1
