@@ -49,12 +49,12 @@ export default function AboutPage() {
     axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
       if(status == 6){
         let result = res.data.filter(item=>{
-          return item.status!=1&&item.status!=2
+          return item.status!=1&&item.status!=2&&item.status!=4
         })
         setData(result)
       } else {
         let result = res.data.filter(item=>{
-          return item.status==1||item.status==2
+          return item.status==1||item.status==2||item.status==4
         })
         setData(result)
         // setData(res.data)
@@ -72,12 +72,12 @@ export default function AboutPage() {
     axiosCustom({ cmd: "/market-separate/orders",params }).then(res => {
       if(status == 6){
         let result = res.data.filter(item=>{
-          return item.status!=1&&item.status!=2
+          return item.status!=1&&item.status!=2&&item.status!=4
         })
         setData(result)
       } else {
         let result = res.data.filter(item=>{
-          return item.status==1||item.status==2
+          return item.status==1||item.status==2||item.status==4
         })
         setData(result)
         // setData(res.data)

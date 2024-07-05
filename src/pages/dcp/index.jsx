@@ -39,6 +39,7 @@ export default function AboutPage() {
   const [priceInfo, setPriceInfo] = useState({})
   const [payInfo, setPayInfo] = useState({})
   const [list, setList] = useState({})
+
   const navigate = useNavigate();
   useEffect(() => {
     commonRequest(1)
@@ -55,6 +56,16 @@ export default function AboutPage() {
       setPriceInfo(res)
     })
     axiosCustom({ cmd: "/receipt/receipt" }).then(res => {
+      console.log(res, 'res+++')
+      if(res.bank){
+        res.bank.isActive = false
+      }
+      if(res.wechat){
+        res.wechat.isActive = false
+      }
+      if(res.alipay){
+        res.alipay.isActive = false
+      }
       setPayInfo(res)
     })
   }
@@ -118,16 +129,18 @@ export default function AboutPage() {
     return ret
   }
   const submit = () => {
-    console.log(payInfo, 'payInfo')
     let arr = []
-    if (payInfo.alipay) {
+    if (payInfo?.alipay?.isActive) {
       arr.push(1)
     }
-    if (payInfo.bank) {
+    if (payInfo?.bank?.isActive) {
       arr.push(2)
     }
-    if (payInfo.wechat) {
+    if (payInfo?.wechat?.isActive) {
       arr.push(3)
+    }
+    if(arr.length== 0){
+      return Toast.show('请选择支付方式')
     }
     if (!value1) {
       return Toast.show('请输入数量')
@@ -193,6 +206,12 @@ export default function AboutPage() {
     }
     setStatus(type)
   }
+  const itemClick = (type) =>{
+    const newInfo = {...payInfo}
+    console.log(type,newInfo, '3123123')
+    newInfo[type].isActive = !newInfo[type].isActive
+    setPayInfo(newInfo)
+  }
   return (
 
     <div className={styles.outBox}>
@@ -252,24 +271,24 @@ export default function AboutPage() {
           </div>
         </div>
         <div className={styles.payment}>
-          <div className={styles.title}>{status == 1 ? '支付' : '出售'}方式</div>
+          <div className={styles.title}>{status == 1 ? '支付' : '出售'}方式 （可多选）</div>
           <div className={styles.payType}>
             {
-              payInfo.wechat && <div className={styles.items}>
+              payInfo.wechat && <div className={styles.items} onClick={()=>itemClick('wechat')} style={{borderColor:payInfo.wechat.isActive?'#000000':'#E8E8EB'}}>
                 <div className={styles.line}></div>
-                <div className={styles.name}>微信支付</div>
+                <div className={styles.name} >微信支付</div>
               </div>
             }
             {
-              payInfo.alipay && <div className={styles.items}>
+              payInfo.alipay && <div className={styles.items} onClick={()=>itemClick('alipay')} style={{borderColor:payInfo.alipay.isActive?'#000000':'#E8E8EB'}}>
                 <div className={styles.line} style={{ background: 'rgba(0, 160, 232, 1)' }}></div>
-                <div className={styles.name}>支付宝</div>
+                <div className={styles.name} >支付宝</div>
               </div>
             }
             {
-              payInfo.bank && <div className={styles.items}>
+              payInfo.bank && <div className={styles.items} onClick={()=>itemClick('bank')} style={{borderColor:payInfo.bank.isActive?'#000000':'#E8E8EB'}}>
                 <div className={styles.line} style={{ background: "rgba(247, 181, 0, 1)" }}></div>
-                <div className={styles.name}>银行卡</div>
+                <div className={styles.name} >银行卡</div>
               </div>
             }
 
