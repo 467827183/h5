@@ -204,11 +204,11 @@ export default function AboutPage() {
                 <img className={styles.btm} src={item.user_face}></img>
                 {item.nick_name}
               </div>
-              <div className={styles.comNumber}>
+              {/* <div className={styles.comNumber}>
                 <div>成交量 {item.num - item.surplus}</div>
                 <div className={styles.point}></div>
                 <div>{getNumber(item)}%成交率</div>
-              </div>
+              </div> */}
               <div className={styles.number}><span className={styles.unit}>￥</span>{item.price}</div>
               <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'9px'}}>
                 <div>
