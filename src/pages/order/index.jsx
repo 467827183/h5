@@ -174,7 +174,7 @@ export default function AboutPage() {
         <PullToRefresh
           style={{ minHeight: '100%' }}
           onRefresh={async () => {
-            commonRequests(currentType)
+            commonRequests(status,currentType)
           }}
         >
           <List style={{ flex: 1 }}>
