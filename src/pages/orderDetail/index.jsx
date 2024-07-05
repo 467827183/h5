@@ -320,17 +320,17 @@ export default function AboutPage() {
           </div>
         </div>
       )}
-      {/* {type == 1 && status == 2&&(
+      {info.type == 'buy' && info.status == '2'&&(
         <div>
           <div className={styles.lines}></div>
           <div className={styles.infoBox} style={{ paddingBottom: "20px" }}>
             <div className={styles.title} style={{ marginBottom: "15px" }}>
               支付凭证
             </div>
-            <Image src={demoSrc} width={115} height={115} fit='fill' />
+            <Image src={info.voucher} width={115} height={115} fit='fill' />
           </div>
         </div>
-      )} */}
+      )}
       {info.type == 'sell' && info.status == '2'&&(
         <div>
           <div className={styles.lines}></div>
