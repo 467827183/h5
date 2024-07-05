@@ -246,6 +246,29 @@ export default function AboutPage() {
           </div>
           )
         }
+                {
+          info?.receipt?.alipay&&(
+            <div style={{ marginBottom: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "8px",
+              }}
+            >
+              <div className={styles.smallLine} style={{background:'#00A0E8'}}></div>
+              <div className={styles.paymentTitle}>支付宝</div>
+            </div>
+            <div className={styles.payDetail}>
+              <div>{info?.receipt?.alipay[0].name}</div>
+              <div className={styles.line}></div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+              {info?.receipt?.alipay[0].value}<img src={copy} className={styles.copyImg} onClick={()=>hashCopy(info?.receipt?.alipay[0].value)}></img>
+              </div>
+            </div>
+          </div>
+          )
+        }
         {
           info?.receipt?.bank&&<div style={{ marginBottom: "20px" }}>
           <div
@@ -255,12 +278,12 @@ export default function AboutPage() {
               marginBottom: "8px",
             }}
           >
-            <div className={styles.smallLine}></div>
+            <div className={styles.smallLine} style={{background:'#F7B500'}}></div>
             <div className={styles.paymentTitle}>银行卡</div>
           </div>
           <div className={styles.payDetail}>
             <div>{info?.receipt?.bank[2].value}</div>
-            <div className={styles.line}></div>
+            <div className={styles.line} ></div>
             <div style={{ display: "flex", alignItems: "center" }}>
               {info?.receipt?.bank[0].value}
               <img src={copy} className={styles.copyImg} onClick={()=>hashCopy(info?.receipt?.bank[0].value)}></img>
