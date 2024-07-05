@@ -194,6 +194,7 @@ export default function AboutPage() {
       <PullToRefresh
         style={{minHeight:'100%'}}
         onRefresh={async () => {
+          setData([])
           originRequest()
         }}
       >

@@ -84,20 +84,20 @@ function MyPage(props) {
       </div>
       <div className={styles.line}></div>
       <div className={styles.menu}>
-        <div className={styles.item}>
-          <div className={styles.left} onClick={gotoAccount}>
+        <div className={styles.item} onClick={gotoAccount}>
+          <div className={styles.left} >
               <img src={accout}></img>
               <div>收款账号管理</div>
           </div>
           <img src={arrow_right} className={styles.right}></img>
         </div>
-        <div className={styles.item}>
+        {/* <div className={styles.item}>
           <div className={styles.left}>
               <img src={customer}></img>
               <div>联系客服</div>
           </div>
           <img src={arrow_right} className={styles.right}></img>
-        </div>
+        </div> */}
         <div className={styles.item} onClick={gotoSetting}>
           <div className={styles.left}>
               <img src={set}></img>
