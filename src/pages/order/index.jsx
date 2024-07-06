@@ -138,6 +138,7 @@ export default function AboutPage() {
       value = 2
     }
     setCurrentType(value)
+    console.log(value, 'valie123123')
     commonCheckRequests(value)
   }
   return (

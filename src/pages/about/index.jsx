@@ -31,7 +31,7 @@ export default function AboutPage() {
     let params =
     {
       page:1,
-      size:10,
+      size:20,
       type:active
     }
     axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
@@ -70,7 +70,7 @@ export default function AboutPage() {
     let params = {
       page:currentPage+1,
       size:20,
-      type:1
+      type:active
     }
     setCurrentPage(currentPage=>currentPage+1)
     axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
