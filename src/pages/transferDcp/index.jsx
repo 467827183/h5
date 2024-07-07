@@ -55,8 +55,7 @@ export default function AboutPage() {
     }
     axiosCustom({ cmd: "/donation/donation",method:'post',data }).then(res => {
       Toast.show('转赠成功')
-      // setDcpInfo(res)
-      console.log(res, 'res++++++')
+      navigate(-1,{replace:true});
     })
   }
   const beforeClose = () =>{
