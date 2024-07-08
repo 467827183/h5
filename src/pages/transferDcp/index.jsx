@@ -1,10 +1,7 @@
 
 import styles from "./index.less";
 import { useEffect, useState } from "react";
-import dropDown from "../../assets/dropDown.png";
-import { sleep } from 'antd-mobile/es/utils/sleep'
 import transfer from "../../assets/transfer.png";
-import Header from '@/components/Header'
 import { useNavigate } from "react-router-dom";
 import close from "../../assets/icon_close.png";
 import { Form, Input, CenterPopup,Toast } from 'antd-mobile'

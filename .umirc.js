@@ -3,6 +3,7 @@ const pxtorem = require("postcss-pxtorem");
 
 export default defineConfig({
   npmClient: "npm",
+  hash: true,
   extraPostCSSPlugins: [
     pxtorem({
       rootValue: 37.5, //这里根据设计稿大小配置,一般是375
