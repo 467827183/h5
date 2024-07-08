@@ -42,7 +42,7 @@ export default function AboutPage() {
       Toast.show('请输入数量')
       return
     }
-    if(Number(submitValue)>Number(info.dcp)){
+    if(Number(submitValue)>Number(info.dcp)&&type == 2){
       Toast.show(`数量不可超过可用`)
       return
     }
@@ -226,7 +226,7 @@ export default function AboutPage() {
         </Form>
         <div>
           <div className={styles.money}>
-            <div>限额</div><div>{info.min_num}-{info.max_num} CNY</div>
+            <div>限额</div><div>{info.min_num}-{info.max_num}</div>
           </div>
           {
             type == 2 && (
