@@ -226,7 +226,7 @@ export default function AboutPage() {
         </Form>
         <div>
           <div className={styles.money}>
-            <div>限额</div><div>{info.min_num}-{info.max_num}</div>
+            <div>限额</div><div>{info.min_num}-{info.max_num} DCP</div>
           </div>
           {
             type == 2 && (
@@ -236,7 +236,7 @@ export default function AboutPage() {
             )
           }
           <div className={styles.overMoney}>
-            <div>{type == 1 ? '应付' : '出售'}</div><div>{submitValue} DCP</div>
+            <div>{type == 1 ? '应付' : '出售'}</div><div>{submitValue} {type == 1 ? 'CNY' : 'DCP'}</div>
           </div>
         </div>
 
