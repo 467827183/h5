@@ -92,7 +92,7 @@ export default function LoginPage() {
   const loginFun = async() => {
     handler.current = Toast.show({
       icon: 'loading',
-      content: '登陆中',
+      content: '登录中',
       duration: 0,
     })
     // 验证码登录
