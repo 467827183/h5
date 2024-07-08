@@ -87,7 +87,7 @@ export default function AboutPage() {
   async function loadMore() {
     let params = {
       page:currentPage+1,
-      size:20,
+      size:1000,
       type:curentType,
       status
     }
