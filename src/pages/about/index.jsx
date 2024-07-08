@@ -31,7 +31,7 @@ export default function AboutPage() {
     let params =
     {
       page:1,
-      size:1000,
+      size:20,
       type:active
     }
     axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
@@ -62,21 +62,16 @@ export default function AboutPage() {
     setSelectItem(newArr)
   }
   async function loadMore() {
-    // const append = await mockRequest()
-    // setData(val => [...val, ...append])
-    setHasMore(data.length > 0)
-  }
-  async function loadMore() {
+    sleep(1000)
     let params = {
       page:currentPage+1,
-      size:1000,
+      size:20,
       type:active
     }
     setCurrentPage(currentPage=>currentPage+1)
-    axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
-      setCountPage(res.totalPage)
-      setData([...data,...res.data])
-    })
+    let result = await axiosCustom({ cmd: "/market-separate/shop-list",params })
+    setCountPage(result.totalPage)
+    setData([...data,...result.data])
   }
   const checkStatus = (type) =>{
     setData([])
@@ -84,7 +79,7 @@ export default function AboutPage() {
     setActive(type)
     let params = {
       page:1,
-      size:1000,
+      size:20,
       type
     }
     axiosCustom({ cmd: "/market-separate/shop-list",params }).then(res => {
