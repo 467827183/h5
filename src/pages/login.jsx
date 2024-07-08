@@ -1,5 +1,5 @@
 import { Checkbox, Input, Button, Popup, Toast } from "antd-mobile";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { getCaptcha, getCaptchaMock } from "@/api/user.js";
 import { useNavigate } from "react-router-dom";
 import styles from "@/assets/css/login.less";
@@ -7,6 +7,7 @@ import logo from '@/assets/logo.png'
 import { axiosCustom,storage } from "@/Common";
 import dropDown from "@/assets/dropdown2.png";
 export default function LoginPage() {
+  const handler = useRef()
   const [type, setType] = useState(1)
   const [type2, setType2] = useState(1)
   const [visible, setVisible] = useState(false)
@@ -89,6 +90,11 @@ export default function LoginPage() {
     }, 1000); // 假设这里模拟请求发送的延迟
   };
   const loginFun = async() => {
+    handler.current = Toast.show({
+      icon: 'loading',
+      content: '登陆中',
+      duration: 0,
+    })
     // 验证码登录
     if(type2 == 1){
       let data = {
@@ -102,7 +108,11 @@ export default function LoginPage() {
         cmd: "/account/in-code", method: "post", data,
       })
       storage.set('token',res)
+      handler.current?.close()
       Toast.show('登录成功')
+      axiosCustom({ cmd: "/user/info" }).then(res => {
+        storage.set('user',res.user)
+      })
       navigate('/home')
     } else {
       let data = {
@@ -116,13 +126,14 @@ export default function LoginPage() {
         cmd: "/account/in-pass", method: "post", data,
       })
       storage.set('token',res)
+      handler.current?.close()
       Toast.show('登录成功')
+      axiosCustom({ cmd: "/user/info" }).then(res => {
+        storage.set('user',res.user)
+      })
       navigate('/home')
     }
-    axiosCustom({ cmd: "/user/info" }).then(res => {
-      console.log(res, 'res+++++')
-      storage.set('user',res.user)
-    })
+
   }
   const submit = () => {
     setVisible(false);
