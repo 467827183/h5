@@ -35,7 +35,7 @@ export default function AboutPage() {
   const [codeSent, setCodeSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [hasMore, setHasMore] = useState(true)
-  const [data, setData] = useState(() => getNextData())
+  const [data, setData] = useState([])
   const [priceInfo, setPriceInfo] = useState({})
   const [payInfo, setPayInfo] = useState({})
   const [list, setList] = useState({})
@@ -121,13 +121,13 @@ export default function AboutPage() {
     var truncatedNum = Math.floor(adjustedNum) / multiplier;
     return truncatedNum;
   }
-  function getNextData() {
-    const ret = []
-    for (let i = 0; i < 18; i++) {
-      ret.unshift({ name: i })
-    }
-    return ret
-  }
+  // function getNextData() {
+  //   const ret = []
+  //   for (let i = 0; i < 18; i++) {
+  //     ret.unshift({ name: i })
+  //   }
+  //   return ret
+  // }
   const submit = () => {
     let arr = []
     if (payInfo?.alipay?.isActive) {
