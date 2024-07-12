@@ -50,7 +50,14 @@ export default function Layout() {
       if(values?.pay_password){
         navigate(value);
       } else {
-        Toast.show('请设置支付密码')
+        axiosCustom({ cmd: "/user/info" }).then(res => {
+          storage.set('user',res.user)
+          if(res.user.pay_password){
+            navigate(value);
+          } else {
+            Toast.show('请设置支付密码')
+          }
+        })
       }
     } else {
       navigate(value);
